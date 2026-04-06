@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>DAP HUB </title>
-   
+    <title>DAP HUB</title>
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -13,12 +13,22 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=Poppins:wght@400;700&family=Roboto:wght@400;700&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
 
     <style id="custom-styles">
-        :root { --primary: #002b3d; --secondary: #189ad3; --accent: #10b981; --danger: #dc2626; --bg: #f8fafc; --card: #ffffff; --text: #0f172a; --border: #e2e8f0; --font-main: 'Inter'; }
+        :root { 
+            --primary: #002b3d; 
+            --secondary: #189ad3; 
+            --accent: #10b981; 
+            --danger: #dc2626; 
+            --bg: #f8fafc; 
+            --card: #ffffff; 
+            --text: #0f172a; 
+            --border: #cbd5e1; 
+            --font-main: 'Inter'; 
+        }
         .dark-mode { --bg: #0f172a; --card: #1e293b; --text: #f8fafc; --border: #334155; }
-       
+        
         html, body {
             font-family: var(--font-main), sans-serif;
-            background: var(--bg);
+            background: linear-gradient(135deg, #f4f7f9 0%, #e0e6ed 100%); 
             color: var(--text);
             margin: 0;
             padding: 0;
@@ -27,24 +37,25 @@
             overflow: hidden;
             transition: background 0.3s;
         }
-       
+        
         .nav-item { padding: 12px 14px; border-radius: 8px; font-weight: 700; color: #94a3b8; font-size: 11px; text-transform: uppercase; cursor: pointer; white-space: nowrap; transition: 0.2s; }
         .nav-item.active { background: var(--secondary) !important; color: white !important; box-shadow: 0 4px 12px rgba(24, 154, 211, 0.4); }
         .nav-item:hover { background: rgba(255,255,255,0.05); color: white; }
-       
+        
         .page { display: none !important; width: 100%; }
         .page.active { display: block !important; animation: fadeIn 0.3s ease; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
-        .card { background: var(--card); border-radius: 12px; padding: 1.5rem; border: 1px solid var(--border); margin-bottom: 1rem; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .card { background: var(--card); border-radius: 12px; padding: 1.5rem; border: 1px solid var(--border); margin-bottom: 1rem; box-shadow: 0 8px 20px rgba(0,0,0,0.04); }
         .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: 8px; border: 1px solid var(--border); background: var(--card); }
         table { width: 100%; min-width: 1000px; text-align: left; border-collapse: collapse; }
         th { background: #001f2d; color: white; padding: 12px; font-size: 10px; text-transform: uppercase; position: sticky; top: 0; z-index: 10; }
-        td { padding: 10px; border-bottom: 1px solid var(--border); font-size: 11px; font-weight: 600; color: var(--text); }
-       
+        td { padding: 10px; border-bottom: 1px solid var(--border); font-size: 11px; font-weight: 600; color: var(--text); cursor: pointer; }
+        
         .inp { width: 100%; padding: 8px; background: var(--bg); border: 1px solid var(--border); border-radius: 6px; font-weight: 600; font-size: 11px; color: var(--text); outline: none; transition: 0.2s; }
+        .inp:disabled { opacity: 0.7; cursor: not-allowed; background: #e2e8f0; }
         .inp:focus { border-color: var(--secondary); box-shadow: 0 0 0 2px rgba(24,154,211,0.2); }
-       
+        
         .btn { padding: 10px 16px; border-radius: 6px; font-weight: 800; font-size: 10px; text-transform: uppercase; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 5px; border: none; transition: 0.2s; }
         .btn:active { transform: scale(0.98); }
         .btn-blue { background-color: #189ad3 !important; color: white !important; }
@@ -53,29 +64,51 @@
         .btn-orange { background-color: #f59e0b !important; color: white !important; }
         .btn-purple { background-color: #a855f7 !important; color: white !important; }
         .btn-yellow { background-color: #eab308 !important; color: white !important; }
-       
+        
         .sex-btn { width: 40px; height: 40px; border: 2px solid var(--border); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-weight: 900; }
         .sex-btn.active { border-color: var(--secondary); background: var(--secondary); color: white; }
-       
+        
         .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 9999; align-items: center; justify-content: center; backdrop-filter: blur(4px); padding: 10px; }
         .modal.active { display: flex; animation: fadeMod 0.2s; }
         @keyframes fadeMod { from { opacity: 0; } to { opacity: 1; } }
         .modal-box { background: var(--card); width: 100%; max-width: 1100px; max-height: 95vh; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 25px; border-radius: 16px; border-top: 6px solid var(--secondary); position: relative; color: var(--text); }
-       
+        
         .img-box { width: 80px; height: 80px; border: 2px dashed var(--border); border-radius: 12px; display: flex; align-items: center; justify-content: center; background: #f1f5f9; overflow: hidden; cursor: pointer; }
         .img-box img { width: 100%; height: 100%; object-fit: cover; }
-       
+        
         .snap-item { border-left: 4px solid var(--secondary); background: #f1f5f9; padding: 10px; border-radius: 6px; margin-bottom: 8px; cursor: pointer; transition: 0.3s; }
         .snap-item:hover { transform: translateX(5px); }
-       
-        #chat-bubble { position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px; background: var(--secondary); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 30px; cursor: pointer; z-index: 100; box-shadow: 0 10px 20px rgba(0,0,0,0.3); }
-        #chat-box { position: fixed; bottom: 100px; right: 30px; width: 320px; height: 450px; background: var(--card); border-radius: 20px; border: 2px solid var(--secondary); display: none; flex-direction: column; z-index: 999; box-shadow: 0 10px 40px rgba(0,0,0,0.3); overflow: hidden; }
+        
+        #chat-bubble { 
+            position: fixed; bottom: 30px; right: 30px; width: 65px; height: 65px; 
+            background: linear-gradient(135deg, #189ad3 0%, #005b82 100%); 
+            border-radius: 50%; display: flex; align-items: center; justify-content: center; 
+            color: white; cursor: pointer; z-index: 100; 
+            box-shadow: 0 8px 25px rgba(0, 43, 61, 0.4); 
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+        #chat-bubble:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 15px 35px rgba(0, 43, 61, 0.6);
+        }
+        #chat-box { 
+            position: fixed; bottom: 110px; right: 30px; width: 340px; height: 480px; 
+            background: var(--card); border-radius: 20px; border: 1px solid rgba(24,154,211,0.2); 
+            display: none; flex-direction: column; z-index: 999; 
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2); overflow: hidden; 
+        }
+        .chat-header {
+            background: linear-gradient(135deg, #189ad3 0%, #005b82 100%);
+            padding: 16px; color: white; font-weight: 900; letter-spacing: 1px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+
         .mod-tag { background: #e2e8f0; color: #475569; padding: 2px 6px; border-radius: 4px; font-size: 9px; margin-right: 4px; font-weight: 800; display: inline-block; margin-top: 2px; }
-       
+        
         .tooth-grid { display: grid; grid-template-columns: repeat(16, 1fr); gap: 2px; width: 100%; margin-top: 10px; }
         .tooth-btn { height: 35px; border: 1px solid var(--border); border-radius: 4px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 9px; font-weight: 900; background: #eee; color: #000; transition: 0.2s; }
         .tooth-btn.active { color: white; border-color: #000; }
-       
+        
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 10px; }
@@ -98,7 +131,7 @@
         .fc-timegrid-now-indicator-arrow { border-color: #5B5FC7 !important; border-width: 5px 0 5px 6px !important; border-top-color: transparent !important; border-bottom-color: transparent !important; }
 
         #calendar-container { background: var(--card); border-radius: 12px; padding: 1.5rem; border: 1px solid var(--border); box-shadow: 0 2px 8px rgba(0,0,0,0.05); overflow-x: auto; -webkit-overflow-scrolling: touch; }
-       
+        
         #maint-overlay { position: fixed; inset: 0; background: rgba(0,31,61,0.95); z-index: 99999; display: none; align-items: center; justify-content: center; padding: 20px; text-align: center; backdrop-filter: blur(4px); }
         #maint-overlay.active { display: flex; }
 
@@ -143,7 +176,7 @@
     </div>
 
     <div id="app-shell" class="hidden flex-col h-full w-full overflow-hidden">
-       
+        
         <header class="bg-[#001f2d] text-white p-3 flex items-center justify-between shadow-lg z-40 shrink-0">
             <div class="flex items-center gap-4">
                 <button onclick="toggleSidebar()" class="text-2xl p-1 hover:text-[#189ad3] transition-colors focus:outline-none">☰</button>
@@ -153,7 +186,7 @@
         </header>
 
         <div class="flex flex-1 relative overflow-hidden h-full w-full">
-           
+            
             <div id="sidebar" class="fixed inset-y-0 left-0 bg-[#001f2d] w-[260px] transform -translate-x-full transition-transform duration-300 z-50 flex flex-col p-4 shadow-2xl h-full border-r-4 border-[#189ad3]">
                 <div class="flex justify-between items-center mb-6 border-b border-gray-700 pb-4">
                     <h2 class="text-2xl font-black text-white italic">MENU</h2>
@@ -165,8 +198,8 @@
 
             <div id="sidebar-overlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/60 hidden z-40 backdrop-blur-sm transition-opacity"></div>
 
-            <main id="main-content" class="flex-1 overflow-y-auto overflow-x-hidden w-full h-full p-4 lg:p-8 bg-[var(--bg)] scroll-smooth pb-32" style="-webkit-overflow-scrolling: touch;">
-               
+            <main id="main-content" class="flex-1 overflow-y-auto overflow-x-hidden w-full h-full p-4 lg:p-8 bg-transparent scroll-smooth pb-32" style="-webkit-overflow-scrolling: touch;">
+                
                 <section id="p-architect" class="page">
                     <h1 class="text-3xl font-black italic text-[#a855f7] mb-6 uppercase">Architect Console</h1>
                     <button onclick="softRefresh()" class="btn btn-blue w-full py-4 mb-6 shadow-xl text-sm tracking-widest"> REFRESH SYSTEM</button>
@@ -232,7 +265,7 @@
                 <section id="p-dashboard" class="page">
                     <h1 class="text-3xl font-black uppercase mb-6 text-gray-800">Analytics Dashboard</h1>
                     <div id="stats-grid" class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6"></div>
-                   
+                    
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
                         <div class="card border-t-4 border-red-500 !mb-0 shadow-sm">
                             <h3 class="font-black text-red-600 mb-1 uppercase text-[11px] tracking-widest">Inactive Doctors (> 2 Months)</h3>
@@ -246,27 +279,38 @@
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-                        <div class="lg:col-span-2 space-y-4">
-                            <div class="card p-0 overflow-hidden relative h-[350px] lg:h-[450px]">
-                                <div class="absolute top-4 left-4 z-10 bg-white/90 p-2 rounded shadow font-black text-[10px] flex gap-2 items-center">
-                                    Clinic Locator: <select id="dash-loc-select" class="inp !w-40 !py-1" onchange="updateDashMap()"></select>
-                                </div>
-                                <iframe id="dash-map-global" width="100%" height="100%" frameborder="0" style="border:0"></iframe>
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
+                        <div class="card lg:col-span-1 p-0 overflow-hidden relative h-[350px]">
+                            <div class="absolute top-4 left-4 z-10 bg-white/90 p-2 rounded shadow font-black text-[10px] flex gap-2 items-center">
+                                Clinic Locator: <select id="dash-loc-select" class="inp !w-40 !py-1" onchange="updateDashMap()"></select>
                             </div>
+                            <iframe id="dash-map-global" width="100%" height="100%" frameborder="0" style="border:0"></iframe>
                         </div>
-                        <div class="card bg-slate-900 text-white flex flex-col h-[350px] lg:h-[450px]">
-                            <h4 class="font-bold mb-4 uppercase text-blue-400 text-[10px] tracking-widest text-center italic">Upcoming Deliveries</h4>
-                            <div id="dash-snap-list" class="flex-1 overflow-y-auto space-y-2 pr-2 custom-scroll" style="-webkit-overflow-scrolling: touch;"></div>
-                            <button onclick="go('calendar')" class="btn btn-blue w-full mt-4 !text-[8px] uppercase">View Full Workspace</button>
+                        <div class="card lg:col-span-1 cursor-pointer hover:shadow-lg transition-shadow">
+                            <h4 class="font-bold text-gray-700 uppercase tracking-widest text-xs mb-2">Sales Forecast (vs Actual)</h4>
+                            <canvas id="chartForecast"></canvas>
+                        </div>
+                        <div class="card lg:col-span-1 cursor-pointer hover:shadow-lg transition-shadow">
+                            <h4 class="font-bold text-gray-700 uppercase tracking-widest text-xs mb-2">Top Sales by Product</h4>
+                            <div class="w-full h-48 mx-auto flex justify-center"><canvas id="chartProducts"></canvas></div>
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-6">
-                        <div class="card"><h4>Sales Forecast (vs Actual)</h4><canvas id="chartForecast"></canvas></div>
-                        <div class="card"><h4>Top Sales by Product</h4><div class="w-64 mx-auto"><canvas id="chartProducts"></canvas></div></div>
-                        <div class="card"><h4>Payment Report (Methods)</h4><div class="w-64 mx-auto"><canvas id="chartPayments"></canvas></div></div>
-                        <div class="card"><h4>Case Status Overview</h4><canvas id="chartStatus"></canvas></div>
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
+                        <div class="card lg:col-span-2 cursor-pointer hover:shadow-lg transition-shadow">
+                            <h4 class="font-bold text-gray-700 uppercase tracking-widest text-xs mb-2">Case Payment Status</h4>
+                            <canvas id="chartCasePayment"></canvas>
+                        </div>
+                        <div class="flex flex-col gap-4">
+                            <div class="card cursor-pointer hover:shadow-lg transition-shadow">
+                                <h4 class="font-bold text-gray-700 uppercase tracking-widest text-xs mb-2">Payment Report (Methods)</h4>
+                                <div class="w-full h-32 mx-auto flex justify-center"><canvas id="chartPayments"></canvas></div>
+                            </div>
+                            <div class="card cursor-pointer hover:shadow-lg transition-shadow">
+                                <h4 class="font-bold text-gray-700 uppercase tracking-widest text-xs mb-2">Total Received Cases (Status)</h4>
+                                <div class="w-full h-32 mx-auto flex justify-center"><canvas id="chartStatus"></canvas></div>
+                            </div>
+                        </div>
                     </div>
                 </section>
 
@@ -357,7 +401,7 @@
                             <div class="table-wrap flex-1 overflow-y-auto rounded-none border-x-0 border-b-0 custom-scroll bg-white">
                                 <table class="w-full text-left border-collapse !min-w-[800px]">
                                     <thead class="bg-white sticky top-0 z-10 shadow-sm">
-                                        <tr><th>Name of Doctor</th><th>Address</th><th>Phone Number</th><th>Email</th><th>Action</th></tr>
+                                        <tr><th>Name of Doctor</th><th>Address</th><th>Phone Number</th><th>Action</th></tr>
                                     </thead>
                                     <tbody id="b-maint-cus"></tbody>
                                 </table>
@@ -403,9 +447,9 @@
                     </div>
 
                     <div id="acc-stats-grid" class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6"></div>
-                   
+                    
                     <div class="grid grid-cols-1 xl:grid-cols-5 gap-6 mb-6">
-                       
+                        
                         <div class="card p-0 col-span-1 xl:col-span-3 flex flex-col h-[600px] border-t-4 border-[#189ad3]">
                             <div class="p-4 bg-gray-50 border-b flex justify-between items-center shrink-0">
                                 <h3 class="font-black uppercase text-gray-700">Accounts Receivables</h3>
@@ -480,47 +524,67 @@
                     </div>
                 </section>
 
-                <section id="p-doctor" class="page">
-                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-4">
-                        <h1 class="text-2xl font-black italic">Doctor Module</h1>
-                        <div class="flex flex-wrap gap-2 w-full md:w-auto">
-                            <input id="d-search" onkeyup="rDocs()" placeholder="Search Doctor..." class="inp !mb-0 flex-1 md:!w-48 bg-white">
-                            <button onclick="modal('doc')" class="btn btn-green shrink-0">ADD</button>
-                            <button onclick="pdf('t-doc')" class="btn btn-red shrink-0">PDF</button>
-                        </div>
-                    </div>
-                    <div class="table-wrap"><table id="t-doc"><thead><tr><th>PIC</th><th>ID</th><th>NAME</th><th>TIN</th><th>CLINIC</th><th>PHONE</th><th>PRC</th><th>LOC</th><th>ADDRESS</th><th>EMAIL</th><th>ACTION</th></tr></thead><tbody id="b-doc"></tbody></table></div>
-                </section>
-
                 <section id="p-clinic_support" class="page h-full">
                     <div class="h-full flex flex-col">
                         <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-4 shrink-0">
                             <h1 class="text-2xl font-black uppercase text-[#189ad3]">Clinic Support</h1>
                             <div class="flex flex-wrap gap-2 w-full md:w-auto">
-                                <input id="o-search-cs" onkeyup="rOrd()" placeholder="Search Case..." class="inp !mb-0 flex-1 md:!w-48 bg-white">
                                 <button onclick="pdf('t-ord-hidden')" class="btn btn-red shrink-0 hidden">PDF</button>
                             </div>
                         </div>
-                       
+                        
                         <div class="flex-1 grid grid-cols-1 xl:grid-cols-12 gap-6 min-h-[700px]">
-                           
+                            
                             <div class="card p-0 flex flex-col h-full xl:col-span-4 border-t-4 border-[#189ad3] shadow-md">
-                                <div class="p-4 bg-gray-50 border-b flex justify-between items-center shrink-0">
-                                    <h3 class="font-black uppercase text-gray-700 text-xs">CLINIC SUPPORT CASE LISTS</h3>
-                                    <button onclick="openClinicSupportModal()" class="btn btn-blue !py-1 px-3 text-[10px] shadow-sm">+ Add</button>
+                                <div class="flex bg-gray-50 border-b shrink-0">
+                                    <button onclick="switchCSTab('cases')" id="tab-cs-cases" class="flex-1 py-3 font-black text-xs text-blue-600 border-b-2 border-blue-600 uppercase">Cases</button>
+                                    <button onclick="switchCSTab('docs')" id="tab-cs-docs" class="flex-1 py-3 font-black text-xs text-gray-500 border-b-2 border-transparent hover:text-blue-500 uppercase">Doctors</button>
                                 </div>
-                                <div class="table-wrap flex-1 overflow-y-auto rounded-none border-x-0 border-b-0 custom-scroll bg-white">
-                                    <table class="w-full text-left border-collapse !min-w-0">
-                                        <thead class="bg-white sticky top-0 z-10 shadow-sm">
-                                            <tr><th class="py-3 px-4">AC NUMBER</th><th>DENTIST NAME</th><th>TARGET DELIVERY DATE</th><th>STATUS</th></tr>
-                                        </thead>
-                                        <tbody id="cs-case-list"></tbody>
-                                    </table>
+                                
+                                <div id="cs-view-cases" class="flex flex-col flex-1 min-h-0">
+                                    <div class="p-3 bg-white border-b flex justify-between items-center shrink-0">
+                                        <input id="o-search-cs" onkeyup="rOrd()" placeholder="Search Case..." class="inp !py-1 !mb-0 w-full max-w-[150px] text-[10px]">
+                                        <button onclick="openClinicSupportModal()" class="btn btn-blue !py-1 px-3 text-[10px] shadow-sm">+ Add Case</button>
+                                    </div>
+                                    <div class="table-wrap flex-1 overflow-y-auto rounded-none border-x-0 border-b-0 custom-scroll bg-white">
+                                        <table class="w-full text-left border-collapse !min-w-0">
+                                            <thead class="bg-white sticky top-0 z-10 shadow-sm">
+                                                <tr><th class="py-3 px-4">AC NUMBER</th><th>DENTIST NAME</th><th>TARGET DELIVERY DATE</th><th>STATUS</th></tr>
+                                            </thead>
+                                            <tbody id="cs-case-list"></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <div id="cs-view-docs" class="flex flex-col flex-1 min-h-0 hidden">
+                                    <div class="p-3 bg-white border-b flex justify-between items-center shrink-0">
+                                        <input id="d-search" onkeyup="rDocs()" placeholder="Search Doctor..." class="inp !py-1 !mb-0 w-full max-w-[150px] text-[10px]">
+                                        <button onclick="modal('doc')" class="btn btn-green !py-1 px-3 text-[10px] shadow-sm">+ Add Doc</button>
+                                    </div>
+                                    <div class="table-wrap flex-1 overflow-y-auto rounded-none border-x-0 border-b-0 custom-scroll bg-white">
+                                        <table class="w-full text-left border-collapse !min-w-0">
+                                            <thead class="bg-white sticky top-0 z-10 shadow-sm">
+                                                <tr>
+                                                    <th class="py-2 px-3 text-center w-12">IMG</th>
+                                                    <th>ID</th>
+                                                    <th>NAME</th>
+                                                    <th>TIN</th>
+                                                    <th>PRC #</th>
+                                                    <th>CLINIC</th>
+                                                    <th>PHONE</th>
+                                                    <th>LOC</th>
+                                                    <th>ADDRESS</th>
+                                                    <th>ACTION</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="b-doc"></tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
 
                             <div class="xl:col-span-8 flex flex-col gap-6 h-full min-h-0">
-                               
+                                
                                 <div class="card p-0 flex flex-col shrink-0 h-[280px] border-t-4 border-green-500 shadow-md">
                                     <div class="p-4 bg-gray-50 border-b flex justify-between items-center shrink-0">
                                         <h3 class="font-black uppercase text-gray-700 text-xs">COMPLETED JOB ORDERS</h3>
@@ -528,7 +592,7 @@
                                     <div class="table-wrap flex-1 overflow-y-auto rounded-none border-x-0 border-b-0 custom-scroll bg-white">
                                         <table class="w-full min-w-[800px] text-left border-collapse">
                                             <thead class="bg-white sticky top-0 z-10 shadow-sm">
-                                                <tr><th class="py-3 px-4">CASE NUMBER</th><th>DENTIST NAME</th><th>STATUS</th><th>DATE SUBMITTED</th><th>DELIVERY DATE</th><th>DATE COMPLETED</th><th>PATIENT NAME</th><th>PRODUCT</th></tr>
+                                                <tr><th class="py-3 px-4">CASE NUMBER</th><th>DENTIST NAME</th><th>STATUS</th><th>DATE SUBMITTED</th><th>TARGET DELIVERY DATE</th><th>DATE COMPLETED</th><th>PATIENT NAME</th><th>PRODUCT</th></tr>
                                             </thead>
                                             <tbody id="cs-completed-list"></tbody>
                                         </table>
@@ -553,7 +617,7 @@
 
                 <section id="p-production" class="page">
                     <h1 class="text-2xl font-black uppercase text-[#d97706] mb-6">Production Module</h1>
-                   
+                    
                     <div class="grid grid-cols-1 xl:grid-cols-3 gap-6 mb-6">
                         <div class="card p-0 col-span-1 xl:col-span-2 flex flex-col h-[700px] border-t-4 border-[#d97706]">
                             <div class="p-4 bg-gray-50 border-b flex justify-between items-center shrink-0">
@@ -568,7 +632,7 @@
                                             <th>STATUS</th>
                                             <th>DENTIST NAME</th>
                                             <th>DATE SUBMITTED</th>
-                                            <th>DELIVERY DATE</th>
+                                            <th>TARGET DELIVERY DATE</th>
                                             <th>DATE COMPLETED</th>
                                             <th>TECHNICIAN</th>
                                         </tr>
@@ -579,8 +643,9 @@
                         </div>
 
                         <div class="card p-0 col-span-1 flex flex-col h-[700px] border-t-4 border-[#189ad3] overflow-hidden">
-                            <div class="p-4 bg-gray-50 border-b shrink-0">
+                            <div class="p-4 bg-gray-50 border-b shrink-0 flex justify-between items-center">
                                 <h3 class="font-black text-lg text-gray-800">Details</h3>
+                                <button id="pd-edit-btn" onclick="editProdDetails()" class="btn btn-orange !py-1 px-3 text-[10px] hidden">EDIT</button>
                             </div>
                             <div id="prod-details-pane" class="flex-1 overflow-y-auto p-6 bg-white" style="-webkit-overflow-scrolling: touch;">
                                 <div class="text-center text-gray-400 font-bold mt-20 text-[10px] uppercase tracking-widest border-2 border-dashed p-6 rounded-xl bg-gray-50">Select a Case to View Details</div>
@@ -619,7 +684,7 @@
 
                 <section id="p-users" class="page">
                     <h1 id="gk-title" class="text-2xl font-black mb-6 text-[#dc2626]">Gatekeeper</h1>
-                   
+                    
                     <div id="super-admin-panel" class="card hidden mb-6 border-l-4 border-blue-600 bg-blue-50">
                         <h3 class="text-blue-900 font-black uppercase tracking-widest text-[11px]">Gatekeeper Override</h3>
                         <label class="flex items-center gap-2 mt-2 font-bold text-sm cursor-pointer text-blue-800">
@@ -638,14 +703,49 @@
                     </div>
                 </section>
 
+                <section id="p-archive" class="page h-full">
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
+                        <h1 class="text-3xl font-black uppercase text-gray-800">System Archive (Clinic Support)</h1>
+                        <div class="flex flex-wrap gap-2">
+                            <select id="arc-year" class="inp !mb-0 w-36 font-bold bg-blue-50 text-blue-900" onchange="rArchive()">
+                                <option value="2025">2025 Records</option>
+                                <option value="2024">2024 Records</option>
+                            </select>
+                            <input id="arc-search" onkeyup="rArchive()" placeholder="Search Case/Doctor..." class="inp !mb-0 w-48 bg-white">
+                        </div>
+                    </div>
+
+                    <div class="card p-0 flex flex-col h-[600px] border-t-4 border-gray-600 shadow-md">
+                        <div class="p-3 border-b bg-gray-50 shrink-0">
+                            <h3 id="arc-table-title" class="font-black text-[11px] text-gray-800 uppercase">Archive Records</h3>
+                        </div>
+                        <div class="table-wrap flex-1 overflow-y-auto rounded-none border-x-0 border-b-0 custom-scroll bg-white">
+                            <table class="w-full text-left border-collapse !min-w-[900px]">
+                                <thead class="bg-gray-100 sticky top-0 z-10 shadow-sm">
+                                    <tr>
+                                        <th class="py-3 px-4 text-black">AC NUMBER</th>
+                                        <th class="text-black">STATUS</th>
+                                        <th class="text-black">DENTIST NAME</th>
+                                        <th class="text-black">PATIENT NAME</th>
+                                        <th class="text-black">RECEIVED DATE</th>
+                                        <th class="text-black">TARGET DELIVERY</th>
+                                        <th class="text-black">PRODUCT / TYPE</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="b-archive"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
                 <section id="p-settings" class="page">
-                    <h1 class="text-2xl font-black mb-6 uppercase">System Settings</h1>
+                    <h1 class="text-2xl font-black mb-6 uppercase text-gray-800">System Settings</h1>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div class="card">
                             <h4>MY IDENTITY</h4>
                             <input id="set-n" class="inp mb-2" placeholder="NEW NAME">
                             <input id="set-p" type="password" class="inp mb-4" placeholder="NEW PASSWORD">
-                           
+                            
                             <label id="show-role-container" class="flex items-center gap-2 mb-4 font-bold text-xs text-gray-600 hidden cursor-pointer">
                                 <input type="checkbox" id="set-show-role" class="w-4 h-4 text-blue-600"> SHOW MY ROLE IN CHAT
                             </label>
@@ -668,6 +768,19 @@
                 </section>
 
             </main>
+        </div>
+    </div>
+
+    <div id="mod-drilldown" class="modal">
+        <div class="modal-box !max-w-4xl">
+            <h2 id="dd-title" class="text-2xl font-black mb-4 uppercase text-[#189ad3]">Data Records</h2>
+            <div class="table-wrap custom-scroll max-h-[60vh] overflow-y-auto">
+                <table class="w-full text-left">
+                    <thead><tr><th>Case ID</th><th>Status</th><th>Dentist</th><th>Patient</th><th>Amount</th></tr></thead>
+                    <tbody id="dd-body"></tbody>
+                </table>
+            </div>
+            <div class="flex justify-end mt-4"><button onclick="closeModals()" class="btn btn-red px-6 py-2">CLOSE</button></div>
         </div>
     </div>
 
@@ -767,7 +880,6 @@
         </div>
     </div>
 
-
     <div id="mod-edit-pay-status" class="modal">
         <div class="modal-box !max-w-[400px] border-t-8 border-blue-500">
             <h2 class="text-xl font-black mb-4 uppercase text-blue-600">Edit Payment Status</h2>
@@ -815,7 +927,7 @@
                 <input type="hidden" id="cal-idx">
                 <div><label class="text-[10px] font-black tracking-widest text-orange-600">ORDER RECEIVED</label><input id="cal-date" type="datetime-local" class="inp border-orange-300"></div>
                 <div><label class="text-[10px] font-black tracking-widest text-green-600">ORDER COMPLETED</label><input id="cal-comp" type="datetime-local" class="inp border-green-300"></div>
-                <div><label class="text-[10px] font-black tracking-widest text-blue-600">DELIVERY DATE</label><input id="cal-due" type="datetime-local" class="inp border-blue-300"></div>
+                <div><label class="text-[10px] font-black tracking-widest text-blue-600">TARGET DELIVERY DATE</label><input id="cal-due" type="datetime-local" class="inp border-blue-300"></div>
                 <div><label class="text-[10px] font-black tracking-widest text-gray-600">RETURN DATE</label><input id="cal-ret" type="datetime-local" class="inp border-gray-300"></div>
                 <div class="sm:col-span-2 mt-2">
                     <label class="text-[10px] font-black tracking-widest text-gray-600">REMARKS / NOTES</label>
@@ -835,10 +947,10 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div class="sm:col-span-2"><label class="text-[10px] font-black text-gray-500 tracking-widest">AC NUMBER (CASE ID)</label><input id="pay-ac-num" class="inp bg-slate-100 font-bold" readonly></div>
                 <div class="sm:col-span-2"><label class="text-[10px] font-black text-gray-500 tracking-widest">DENTIST NAME</label><input id="pay-dentist" class="inp bg-slate-100 font-bold" readonly></div>
-               
+                
                 <div><label class="text-[10px] font-black text-gray-500 tracking-widest">PAYMENT DATE</label><input id="pay-date" type="date" class="inp"></div>
                 <div><label class="text-[10px] font-black text-gray-500 tracking-widest">TOTAL COST</label><input id="pay-tot" class="inp bg-slate-100 font-black text-blue-600" readonly></div>
-               
+                
                 <div class="sm:col-span-2 border-t pt-4 mt-2"></div>
 
                 <div><label class="text-[10px] font-black text-gray-500 tracking-widest">AMOUNT PAID</label><input id="pay-amt" type="number" class="inp border-2 border-green-400 font-black text-xl text-green-700 py-3" placeholder="₱0.00" onkeyup="calcPayBal()" onchange="calcPayBal()"></div>
@@ -850,7 +962,7 @@
                         <option value="PDC">PDC</option>
                     </select>
                 </div>
-               
+                
                 <div><label class="text-[10px] font-black text-gray-500 tracking-widest">STAFF HANDLER</label><input id="pay-staff" class="inp uppercase py-3" placeholder="Staff Name"></div>
                 <div><label class="text-[10px] font-black text-gray-500 tracking-widest">OR / REF NUMBER</label><input id="pay-or" class="inp uppercase py-3" placeholder="OR12345"></div>
 
@@ -861,7 +973,7 @@
                         <img id="pay-proof-img" class="w-12 h-12 object-cover border bg-gray-100 hidden">
                     </div>
                 </div>
-               
+                
                 <div class="sm:col-span-2 bg-slate-800 p-4 rounded-xl text-center shadow-inner mt-2">
                     <span class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Remaining Balance</span>
                     <div class="text-4xl font-black text-white mt-1">₱<span id="pay-bal">0</span></div>
@@ -873,9 +985,9 @@
             </div>
         </div>
     </div>
-   
+    
     <div id="mod-user-mods" class="modal"><div class="modal-box !max-w-md"><h2 class="text-xl font-black mb-4 uppercase">Module Permissions</h2><div id="mods-check-list" class="space-y-1 mb-4 max-h-[50vh] overflow-y-auto" style="-webkit-overflow-scrolling: touch;"></div><input type="hidden" id="mod-target-idx"><button onclick="saveUserMods()" class="btn btn-blue w-full py-3">UPDATE ACCESS</button></div></div>
-   
+    
     <div id="mod-doc" class="modal">
         <div class="modal-box">
             <h2 class="text-xl font-black mb-4 uppercase text-[#189ad3]">Doctor/Customer Details</h2>
@@ -893,7 +1005,6 @@
                     <div><label>PRC #</label><input id="d-prc" class="inp"></div>
                     <div><label>CLINIC</label><input id="d-clinic" class="inp"></div>
                     <div><label>PHONE</label><input id="d-phone" class="inp"></div>
-                    <div><label>EMAIL</label><input id="d-email" class="inp"></div>
                     <div><label>LOC <button onclick="addOpt('loc')" class="bg-black text-white px-1 rounded">+</button></label><select id="d-loc" class="inp"></select></div>
                     <div class="sm:col-span-2"><label>ADDRESS (MAP SEARCH)</label><input id="d-addr" class="inp" onkeyup="updateMap()"></div>
                 </div>
@@ -905,7 +1016,7 @@
             </div>
         </div>
     </div>
-   
+    
     <div id="mod-ord" class="modal">
         <div class="modal-box !max-w-[1100px]">
             <h2 class="text-2xl font-black mb-4 text-[#189ad3]">CASE ENTRY</h2>
@@ -926,7 +1037,7 @@
                     <label>DOCTOR</label><select id="o-doc" class="inp" onchange="fillDocInfo()"></select>
                     <label>PIC (Name / Info)</label><input id="o-pic" type="text" class="inp">
                     <label>PATIENT</label><input id="o-pat" class="inp uppercase">
-                   
+                    
                     <div class="grid grid-cols-2 gap-2">
                         <div>
                             <label>SEX</label>
@@ -944,25 +1055,25 @@
                 </div>
                 <div class="space-y-2">
                     <label>ORDER RECEIVED</label><input id="o-date" type="datetime-local" class="inp border-orange-300">
-                   
+                    
                     <div id="wrap-o-comp" class="space-y-1"><label>ORDER COMPLETED</label><input id="o-comp" type="datetime-local" class="inp border-green-300"></div>
-                    <div id="wrap-o-due" class="space-y-1"><label>DELIVERY DATE</label><input id="o-due" type="datetime-local" class="inp border-blue-300"></div>
+                    <div id="wrap-o-due" class="space-y-1"><label>TARGET DELIVERY DATE</label><input id="o-due" type="datetime-local" class="inp border-blue-300"></div>
                     <div id="wrap-o-ret" class="space-y-1"><label>RETURN DATE</label><input id="o-ret" type="datetime-local" class="inp"></div>
-                   
+                    
                     <label>STATUS <button type="button" onclick="addOpt('stat')" class="bg-black text-white px-1 rounded">+</button></label><select id="o-stat" class="inp font-bold text-blue-700"></select>
-                   
+                    
                     <label class="text-blue-600 font-bold mt-2 block border-t pt-2">STL FILE UPLOAD (.stl) <span class="text-gray-400 text-[9px]">(Optional)</span></label>
                     <div class="flex items-center gap-2 mb-2">
                         <input type="file" id="o-stl" accept=".stl" class="inp flex-1 text-[10px]" onchange="document.getElementById('o-stl-name').innerText = this.files[0]?.name || 'NO FILE'">
                         <span id="o-stl-name" class="text-[9px] font-bold text-gray-500 w-24 truncate">NO FILE</span>
                     </div>
-                   
+                    
                     <label class="text-purple-600 font-bold mt-2 block">ORDER'S FORMS IMAGE <span class="text-gray-400 text-[9px]">(Optional)</span></label>
                     <div class="flex items-center gap-2 mb-2">
                         <input type="file" id="o-form" accept="image/*" class="inp flex-1 text-[10px]" onchange="previewImg(this, 'o-form-img')">
                         <img id="o-form-img" class="w-10 h-10 object-cover border bg-gray-100 hidden">
                     </div>
-                   
+                    
                     <label class="mt-2 block border-t pt-2">PRODUCTS</label>
                     <div id="o-prods" class="h-48 overflow-y-auto border p-2 bg-white rounded space-y-1" style="-webkit-overflow-scrolling: touch;"></div>
                 </div>
@@ -977,7 +1088,7 @@
                         <input type="file" id="qr-up" accept="image/*" class="hidden" onchange="upQR(this)">
                         <button type="button" onclick="document.getElementById('qr-up').click()" class="text-[9px] text-blue-500 uppercase mt-1 font-bold">UPDATE QR IMAGE</button>
                     </div>
-                   
+                    
                     <div class="bg-slate-900 text-white p-6 rounded-xl text-center mt-4">
                         <div id="calc-breakdown" class="text-[10px] text-blue-300 font-bold tracking-widest uppercase mb-1"></div>
                         <small class="text-[10px] tracking-widest text-gray-400">TOTAL AMOUNT</small>
@@ -994,19 +1105,41 @@
     </div>
 
     <div id="chat-box">
-        <div class="bg-[#189ad3] p-3 text-white font-bold flex justify-between items-center"><span>MESSENGER</span><button onclick="toggleChat()" class="text-lg">✕</button></div>
-        <div class="p-2 border-b"><select id="chat-to" class="inp mb-0" onchange="rChat()"></select></div>
-        <div id="chat-body" class="flex-1 p-3 overflow-y-auto bg-slate-50 space-y-2 text-xs" style="-webkit-overflow-scrolling: touch;"></div>
-        <div class="p-2 border-t flex gap-2"><input id="chat-in" class="inp mb-0" placeholder="Type message..."><button onclick="sendChat()" class="btn btn-blue px-4">SEND</button></div>
+        <div class="chat-header">
+            <div class="flex items-center gap-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path></svg>
+                <span>MESSENGER</span>
+            </div>
+            <button onclick="toggleChat()" class="text-xl hover:text-gray-300 transition-colors">✕</button>
+        </div>
+        <div class="p-3 border-b bg-gray-50"><select id="chat-to" class="inp mb-0 shadow-sm" onchange="rChat()"></select></div>
+        <div id="chat-body" class="flex-1 p-4 overflow-y-auto bg-slate-50 space-y-3 text-xs" style="-webkit-overflow-scrolling: touch;"></div>
+        <div class="p-3 border-t bg-white flex gap-2">
+            <input id="chat-in" class="inp mb-0 flex-1 shadow-sm" placeholder="Type a message...">
+            <button onclick="sendChat()" class="btn btn-blue px-5 shadow-md">SEND</button>
+        </div>
     </div>
-    <div id="chat-bubble" onclick="toggleChat()"></div>
+    
+    <div id="chat-bubble" onclick="toggleChat()">
+        <svg class="w-8 h-8 drop-shadow-md" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+    </div>
+
+    <script type="text/csv" id="raw-2024">
+0,Delivered,AC0003,Dr. Mary Ann Mercado,Marlon Linan,2024-01-18,2024-02-03,PFM Non PM (US)
+1,Delivered,AC0004,Dr. Orly Villa,Emily,2024-01-18,2024-02-03,EMAX VENEER
+2,Delivered,AC0005,Dr. Bryan ong,Pacita Ng,2024-01-19,2024-01-30,Zirconia Layering
+3,Delivered,AC0006,Dr. Mary Ann Mercado,Rhobie Cabanas,2024-01-22,2024-01-30,PFZ Porcelain Fused to Zirconia
+    </script>
+    <script type="text/csv" id="raw-2025">
+1,Delivered,AC0513,Dr. Reinalyn Munoz,Lai Austria,2025-01-03,2025-01-13,PFZ-VENEER
+2,Delivered,AC0514,Dr. Carlo Umlas,Lea Ong Samson,2025-01-03,2025-01-07,PFZ Layering
+    </script>
 
   <script>
-    // CONFIG & STATE (Using dap_v4_ prefix to force a clean slate from old data)
-    const BASE_MODS = ['dashboard','sales','maintenance','accounting','discount','doctor','clinic_support','production','calendar','users','settings'];
+    const BASE_MODS = ['dashboard','sales','maintenance','accounting','discount','clinic_support','production','calendar','users','settings', 'archive'];
     const PRODS = ["PFM","MARYLAND WING","W/ PORCELAIN GUMS","EMAX","ONLAY","INLAY","TOOTH COLOR","INDIVIDUAL CROWN","ZIRCONIA","PFZ (PORCELAIN FUSED)","METAL TRIAL","TRIAL UNGLAZE","NON-PRECIOUS METAL","TILITE (US)","COLLAR","VENEERS","GLASS CERAMIC","LAYERING","TEMPORARY CROWN","BRIDGE CROWN","FCZ (FULL CONTOUR)","PREMIUM ZIRCONIA","TRIAL GLAZE"];
     const PCOLORS = ["#3b82f6", "#ef4444", "#10b981", "#f59e0b", "#8b5cf6", "#ec4899", "#06b6d4", "#f97316", "#14b8a6", "#6366f1", "#d946ef", "#84cc16", "#f43f5e", "#0ea5e9", "#7c3aed"];
-    const ADMIN_DEFAULT_MODS = ['dashboard','sales','maintenance','accounting','doctor','clinic_support','production','calendar','users'];
+    const ADMIN_DEFAULT_MODS = ['dashboard','sales','maintenance','accounting','clinic_support','production','calendar','users', 'archive'];
 
     let cachedSys = JSON.parse(localStorage.getItem('dap_v4_sys')) || {};
 
@@ -1032,6 +1165,9 @@
             adminFullMods: cachedSys.adminFullMods || false,
             maint: cachedSys.maint || { active: false }
         },
+        arcLoaded: false,
+        arc24: [],
+        arc25: [],
         msg: JSON.parse(localStorage.getItem('dap_v4_msg')) || [],
         curr: null
     };
@@ -1070,36 +1206,38 @@
         if(!S.prData[p]) S.prData[p] = { code: 'N/A', cat: 'PRODUCT' };
     });
 
-    function sv(){ Object.keys(S).forEach(k => { if(k!=='curr') localStorage.setItem('dap_v4_'+k, JSON.stringify(S[k])); }); }
-   
+    function sv(){ Object.keys(S).forEach(k => { if(k!=='curr' && k!=='arc24' && k!=='arc25' && k!=='arcLoaded') localStorage.setItem('dap_v4_'+k, JSON.stringify(S[k])); }); }
+    
     if(usersModified) sv();
 
     S.dynMods.forEach(m => injectDynMod(m));
 
     S.u.forEach(user => {
         if (user.m) {
-            if (user.m.includes('voucher')) {
-                user.m = user.m.filter(mod => mod !== 'voucher');
-                usersModified = true;
-            }
-            if (user.d === 'ADMIN' && user.m.includes('discount')) {
-                user.m = user.m.filter(mod => mod !== 'discount');
-                usersModified = true;
-            }
-            if ((user.d === 'SYSTEM ARCHITECT') && !user.m.includes('discount')) {
-                user.m.push('discount');
-                usersModified = true;
-            }
-            // Auto-grant sales module access if they are admin level and it's missing.
-            if ((user.d === 'SYSTEM ARCHITECT' || user.d === 'ADMIN') && !user.m.includes('sales')) {
-                user.m.push('sales');
-                usersModified = true;
-            }
+            if (user.m.includes('voucher')) user.m = user.m.filter(mod => mod !== 'voucher');
+            if (user.d === 'ADMIN' && user.m.includes('discount')) user.m = user.m.filter(mod => mod !== 'discount');
+            if (user.d === 'SYSTEM ARCHITECT' && !user.m.includes('discount')) user.m.push('discount');
+            if ((user.d === 'SYSTEM ARCHITECT' || user.d === 'ADMIN') && !user.m.includes('sales')) user.m.push('sales');
+            if ((user.d === 'SYSTEM ARCHITECT' || user.d === 'ADMIN') && !user.m.includes('archive')) user.m.push('archive');
+            if (user.m.includes('doctor')) user.m = user.m.filter(mod => mod !== 'doctor');
         }
     });
-   
-    function closeModals() {
-        document.querySelectorAll('.modal').forEach(m => m.classList.remove('active'));
+    
+    function closeModals() { document.querySelectorAll('.modal').forEach(m => m.classList.remove('active')); }
+
+    function openDrilldownModal(title, dataArray) {
+        document.getElementById('dd-title').innerText = title;
+        let tbody = document.getElementById('dd-body');
+        tbody.innerHTML = dataArray.map(x => `
+            <tr class="border-b">
+                <td class="font-bold p-2">${x.id}</td>
+                <td class="p-2"><span class="px-2 py-1 bg-gray-200 rounded text-[9px] font-bold">${x.st}</span></td>
+                <td class="p-2">${x.doc}</td>
+                <td class="p-2">${x.pat}</td>
+                <td class="text-green-600 font-bold p-2">₱${x.tot}</td>
+            </tr>
+        `).join('') || `<tr><td colspan="5" class="p-4 text-center text-gray-500 font-bold">No associated records found.</td></tr>`;
+        document.getElementById('mod-drilldown').classList.add('active');
     }
 
     function injectDynMod(n) {
@@ -1121,7 +1259,6 @@
         let maintOv = document.getElementById('maint-overlay');
         if (S.sys.maint && S.sys.maint.active) {
             document.getElementById('maint-overlay-msg').innerText = S.sys.maint.msg || "System is down for scheduled maintenance.";
-           
             let timeEl = document.getElementById('maint-overlay-time');
             if (S.sys.maint.start || S.sys.maint.end) {
                 timeEl.innerText = `Schedule: ${S.sys.maint.start ? new Date(S.sys.maint.start).toLocaleString() : 'Now'} to ${S.sys.maint.end ? new Date(S.sys.maint.end).toLocaleString() : 'TBD'}`;
@@ -1143,25 +1280,23 @@
         let acc=S.u.find(x=>x.n===u && x.p===p);
         if(!acc) return alert('No User Found');
         if(acc.s !== 'active') return alert('Access Restricted. Status: ' + acc.s.toUpperCase());
-       
+        
         S.curr=acc;
         document.getElementById('auth-layer').classList.add('hidden');
         document.getElementById('app-shell').classList.remove('hidden');
-        initNav(); initChat();
-        populateSandboxSelect();
-        checkMaintenance();
+        initNav(); initChat(); populateSandboxSelect(); checkMaintenance();
     }
-   
+    
     function register(){
         let n=document.getElementById('r-name').value.toUpperCase();
         let r=document.getElementById('r-role').value;
         let p=document.getElementById('r-pass').value;
         if(!n||!p) return alert('Data Required');
         if(S.u.find(x=>x.n===n)) return alert('Username already exists!');
-       
+        
         let defMods = ['dashboard'];
         if (r === 'ADMIN') defMods = ADMIN_DEFAULT_MODS;
-        else if (r === 'STAFF') defMods = ['dashboard', 'sales', 'doctor', 'clinic_support'];
+        else if (r === 'STAFF') defMods = ['dashboard', 'sales', 'clinic_support', 'archive'];
         else if (r === 'HR') defMods = ['dashboard', 'calendar', 'users'];
         else if (r === 'PRODUCTION') defMods = ['dashboard', 'calendar', 'production'];
         else if (r === 'ACCOUNTING') defMods = ['dashboard', 'calendar', 'accounting', 'discount'];
@@ -1169,7 +1304,7 @@
         S.u.push({n, d:r, p, s:'pending', m:defMods});
         sv(); alert('Request Sent!'); toggleReg(false);
     }
-   
+    
     function logout(){ location.reload(); }
 
     function toggleReg(x){
@@ -1200,13 +1335,20 @@
                 <span class="w-2 h-2 rounded-full bg-blue-500 opacity-50"></span>${m.replace('_', ' ')}
             </div>
         `).join('');
-       
         updateProdFilterDropdown();
-       
         go(mods[0] || 'dashboard');
     }
 
     function popSel(id, arr){ let el=document.getElementById(id); if(el) el.innerHTML=arr.map(x=>`<option value="${x}">${x}</option>`).join(''); }
+
+    function switchCSTab(t) {
+        document.getElementById('cs-view-cases').classList.toggle('hidden', t !== 'cases');
+        document.getElementById('cs-view-docs').classList.toggle('hidden', t !== 'docs');
+        document.getElementById('tab-cs-cases').className = t === 'cases' ? "flex-1 py-3 font-black text-xs text-blue-600 border-b-2 border-blue-600 uppercase" : "flex-1 py-3 font-black text-xs text-gray-500 border-b-2 border-transparent hover:text-blue-500 uppercase transition-colors";
+        document.getElementById('tab-cs-docs').className = t === 'docs' ? "flex-1 py-3 font-black text-xs text-blue-600 border-b-2 border-blue-600 uppercase" : "flex-1 py-3 font-black text-xs text-gray-500 border-b-2 border-transparent hover:text-blue-500 uppercase transition-colors";
+        if(t === 'docs') rDocs();
+        if(t === 'cases') rOrd();
+    }
 
     function go(id){
         document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
@@ -1215,17 +1357,17 @@
             let s = n.querySelector('span');
             if(s) { s.classList.replace('bg-white', 'bg-blue-500'); s.classList.add('opacity-50'); }
         });
-       
+        
         let target = document.getElementById('p-'+id);
         if(target) target.classList.add('active');
-       
+        
         let activeNav = document.getElementById('nav-'+id);
         if(activeNav) {
             activeNav.classList.add('active');
             let dot = activeNav.querySelector('span');
             if(dot) { dot.classList.replace('bg-blue-500', 'bg-white'); dot.classList.remove('opacity-50'); }
         }
-       
+        
         if(window.innerWidth < 1024) {
             const sb = document.getElementById('sidebar');
             if(!sb.classList.contains('-translate-x-full')) toggleSidebar();
@@ -1234,18 +1376,17 @@
         if(id==='dashboard') dash();
         if(id==='sales') rSales();
         if(id==='maintenance') rMaintenance();
-        if(id==='doctor') rDocs();
-        if(id==='clinic_support') { selectedClinicSupportIdx = -1; rOrd(); }
+        if(id==='clinic_support') { selectedClinicSupportIdx = -1; switchCSTab('cases'); rOrd(); rDocs(); }
         if(id==='production') { selectedProdIdx = -1; rProd(); }
         if(id==='accounting') { rAcc(); renderCatalog(); }
         if(id==='discount') rDisc();
         if(id==='users') rUsers();
+        if(id==='archive') rArchive();
         if(id==='calendar') { setTimeout(() => initFullCal(), 100); }
         if(id==='settings') {
             popSel('ui-font', S.fonts);
             document.getElementById('btn-factory-reset').classList.toggle('hidden', S.curr.d !== 'SYSTEM ARCHITECT');
             document.getElementById('btn-force-stop').classList.toggle('hidden', S.curr.d !== 'SYSTEM ARCHITECT');
-           
             let srContainer = document.getElementById('show-role-container');
             if(S.curr.d === 'SYSTEM ARCHITECT') {
                 srContainer.classList.remove('hidden');
@@ -1255,19 +1396,84 @@
             }
         }
         if(id==='architect') rTrash();
-       
+        
         document.getElementById('main-content').scrollTo(0,0);
     }
 
     function softRefresh() {
         updateProdFilterDropdown();
-        rDocs(); rOrd(); rProd(); dash(); rMaintenance(); rAcc(); rDisc(); rUsers(); rTrash(); renderCatalog(); rSales();
+        rDocs(); rOrd(); rProd(); dash(); rMaintenance(); rAcc(); rDisc(); rUsers(); rTrash(); renderCatalog(); rSales(); rArchive();
         alert('Data Refreshed Successfully!');
     }
 
-    // --- SALES MODULE LOGIC ---
+    function parseCSVRow(str) {
+        let result = [];
+        let insideQuotes = false;
+        let currentWord = '';
+        for (let i = 0; i < str.length; i++) {
+            if (str[i] === '"') {
+                insideQuotes = !insideQuotes;
+            } else if (str[i] === ',' && !insideQuotes) {
+                result.push(currentWord.trim());
+                currentWord = '';
+            } else {
+                currentWord += str[i];
+            }
+        }
+        result.push(currentWord.trim());
+        return result;
+    }
+
+    function loadArchiveData() {
+        if (S.arcLoaded) return;
+        let raw24 = document.getElementById('raw-2024')?.innerText || '';
+        let raw25 = document.getElementById('raw-2025')?.innerText || '';
+
+        S.arc24 = raw24.split('\n').map(line => {
+            if(!line.trim() || line.includes('AC NUMBER')) return null;
+            let c = parseCSVRow(line);
+            if(c.length < 7) return null;
+            return { ac: c[2], status: c[1], doc: c[3], pat: c[4], rec: c[5], due: c[6], prod: c[7] };
+        }).filter(Boolean);
+
+        S.arc25 = raw25.split('\n').map(line => {
+            if(!line.trim() || line.includes('AC NUMBER')) return null;
+            let c = parseCSVRow(line);
+            if(c.length < 7) return null;
+            return { ac: c[3], status: c[2], doc: c[4], pat: c[5], rec: c[7], due: c[8], prod: c[10] };
+        }).filter(Boolean);
+
+        S.arcLoaded = true;
+    }
+
+    function rArchive() {
+        loadArchiveData();
+        let year = document.getElementById('arc-year').value;
+        let q = document.getElementById('arc-search').value.toUpperCase();
+        let data = (year === '2024') ? S.arc24 : S.arc25;
+        
+        document.getElementById('arc-table-title').innerText = `${year} ARCHIVED CLINIC SUPPORT RECORDS (${data.length} TOTAL EMBEDDED)`;
+
+        let fil = data.filter(x => 
+            (x.ac && x.ac.toUpperCase().includes(q)) || 
+            (x.doc && x.doc.toUpperCase().includes(q)) || 
+            (x.pat && x.pat.toUpperCase().includes(q))
+        );
+
+        document.getElementById('b-archive').innerHTML = fil.map((x) => `
+            <tr class="hover:bg-gray-50 border-b transition-colors cursor-default">
+                <td class="px-4 py-3 font-black text-gray-800">${x.ac || '-'}</td>
+                <td><span class="px-2 py-1 bg-gray-200 text-gray-800 rounded font-bold text-[9px] uppercase">${x.status || 'N/A'}</span></td>
+                <td class="font-bold text-xs text-gray-700">${x.doc || '-'}</td>
+                <td class="text-xs uppercase text-gray-600">${x.pat || '-'}</td>
+                <td class="text-xs text-gray-600">${x.rec || '-'}</td>
+                <td class="text-xs text-gray-600">${x.due || '-'}</td>
+                <td class="text-xs font-bold text-blue-700">${x.prod || '-'}</td>
+            </tr>
+        `).join('') || `<tr><td colspan="7" class="text-center p-8 font-bold text-gray-400">NO RECORDS FOUND.</td></tr>`;
+    }
+
     function rSales() {
-        // Render Sales Team
         document.getElementById('sales-team-list').innerHTML = S.salesTeam.map((t, i) => `
             <div class="p-2 border rounded bg-white shadow-sm flex justify-between items-center group mb-2 hover:bg-blue-50 transition-colors">
                 <div>
@@ -1281,7 +1487,6 @@
             </div>
         `).join('') || '<div class="text-center text-[10px] text-gray-400 p-4">No Sales Team Members</div>';
 
-        // Render Customers using S.d
         document.getElementById('sales-customers-list').innerHTML = S.d.map((c, i) => `
             <div class="p-3 border-b border-gray-100 bg-white hover:bg-gray-50 transition-colors group">
                 <div class="text-[10px] text-gray-400 font-bold mb-1 truncate border-b pb-1 uppercase">${c.addr || 'No Address Provided'}</div>
@@ -1289,7 +1494,7 @@
                     <div>
                         <div class="font-bold text-[11px] text-gray-800">${c.n}</div>
                         <div class="text-[9px] text-blue-600 font-bold uppercase">${c.clinic || 'CLINIC'}</div>
-                        <div class="text-[9px] text-gray-500 mt-1">${c.phone || ''} <br> ${c.email || ''}</div>
+                        <div class="text-[9px] text-gray-500 mt-1">${c.phone || ''}</div>
                     </div>
                     <div class="flex flex-col gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                         <button onclick="editDoc(${i})" class="btn btn-blue !py-1 !px-2 !text-[9px]">EDIT</button>
@@ -1299,7 +1504,6 @@
             </div>
         `).join('') || '<div class="text-center text-[10px] text-gray-400 p-4">No Customers Found. Please add via the Customer/Doctor button.</div>';
 
-        // Render Pipeline
         document.getElementById('sales-pipeline-list').innerHTML = S.pipeline.map((p, i) => `
             <tr class="hover:bg-purple-50 transition-colors border-b">
                 <td class="font-bold text-[11px] pl-3 py-3">${p.name}</td>
@@ -1326,7 +1530,7 @@
             let labels = S.pipeline.slice(0, 6).map(p => p.prod || 'N/A');
             let fData = S.pipeline.slice(0, 6).map(p => p.fval || 0);
             let aData = S.pipeline.slice(0, 6).map(p => p.aval || 0);
-           
+            
             window.salesFC = new Chart(sfCtx.getContext('2d'), {
                 type: 'bar',
                 data: {
@@ -1344,8 +1548,8 @@
         if(scCtx) {
             if(window.salesCC) window.salesCC.destroy();
             let labels = S.salesTeam.length ? S.salesTeam.map(t => t.n) : ['Amado', 'Juanito', 'Nimfa', 'Philip'];
-            let data = labels.map(l => Math.floor(Math.random() * 50000) + 10000); // Visual demonstration based on sample
-           
+            let data = labels.map(l => Math.floor(Math.random() * 50000) + 10000); 
+            
             window.salesCC = new Chart(scCtx.getContext('2d'), {
                 type: 'bar',
                 data: {
@@ -1357,7 +1561,6 @@
         }
     }
 
-    // Sales Team CRUD
     function openSalesTeamModal() {
         document.getElementById('st-idx').value = "";
         document.getElementById('st-name').value = "";
@@ -1380,13 +1583,13 @@
         let email = document.getElementById('st-email').value;
         let phone = document.getElementById('st-phone').value;
         if(!n) return alert("Name is required!");
-       
+        
         let i = document.getElementById('st-idx').value;
         let obj = { n, email, phone };
-       
+        
         if(i === "") S.salesTeam.push(obj);
         else S.salesTeam[i] = obj;
-       
+        
         sv(); rSales(); closeModals();
     }
     function delSalesTeam(i) {
@@ -1396,7 +1599,6 @@
         }
     }
 
-    // Pipeline CRUD
     function openPipelineModal() {
         if(S.d.length === 0) return alert("Please add at least one Customer (Doctor) first.");
         document.getElementById('sp-idx').value = "";
@@ -1428,7 +1630,7 @@
     function savePipeline() {
         let name = document.getElementById('sp-name').value.toUpperCase();
         if(!name) return alert("Pipeline Name is required!");
-       
+        
         let i = document.getElementById('sp-idx').value;
         let obj = {
             name,
@@ -1439,10 +1641,10 @@
             fval: parseFloat(document.getElementById('sp-fval').value) || 0,
             aval: parseFloat(document.getElementById('sp-aval').value) || 0
         };
-       
+        
         if(i === "") S.pipeline.push(obj);
         else S.pipeline[i] = obj;
-       
+        
         sv(); rSales(); closeModals();
     }
     function delPipeline(i) {
@@ -1452,10 +1654,7 @@
         }
     }
 
-
-    // --- UPGRADED MAINTENANCE MODULE ---
     function rMaintenance() {
-        // Patients
         let uniquePats = []; let seen = new Set();
         S.o.forEach((x, idx) => {
             if(!seen.has(x.pat) && x.pat) {
@@ -1469,10 +1668,8 @@
         document.getElementById('m-pat-cnt').innerText = uniquePats.length;
         document.getElementById('b-maint-pat').innerHTML = uniquePats.map(x => `<tr><td class="font-black">${x.pat}</td><td>${x.sex||'N/A'}</td><td>${x.age||'N/A'}</td><td class="font-bold text-blue-600">${x.relatedCount}</td><td class="font-bold text-orange-600">${x.relatedCount}</td><td><button onclick="viewMaintPat('${x.pat.replace(/'/g, "\\'")}')" class="btn btn-blue !py-1 !px-2 !text-[9px] mr-1">VIEW</button><button onclick="editMaintPat('${x.pat.replace(/'/g, "\\'")}')" class="btn btn-orange !py-1 !px-2 !text-[9px]">EDIT</button></td></tr>`).join('') || '<tr><td colspan="6" class="text-center p-4">No Patients.</td></tr>';
 
-        // Customers
-        document.getElementById('b-maint-cus').innerHTML = S.d.map((x, i) => `<tr><td class="font-black">${x.n}</td><td>${x.addr||'N/A'}</td><td>${x.phone||'N/A'}</td><td>${x.email||'N/A'}</td><td><button onclick="vDoc(${i})" class="btn btn-blue !py-1 !px-2 !text-[9px] mr-1">VIEW</button><button onclick="editDoc(${i})" class="btn btn-orange !py-1 !px-2 !text-[9px]">EDIT</button></td></tr>`).join('') || '<tr><td colspan="5" class="text-center p-4">No Customers.</td></tr>';
+        document.getElementById('b-maint-cus').innerHTML = S.d.map((x, i) => `<tr><td class="font-black">${x.n}</td><td>${x.addr||'N/A'}</td><td>${x.phone||'N/A'}</td><td><button onclick="vDoc(${i})" class="btn btn-blue !py-1 !px-2 !text-[9px] mr-1">VIEW</button><button onclick="editDoc(${i})" class="btn btn-orange !py-1 !px-2 !text-[9px]">EDIT</button></td></tr>`).join('') || '<tr><td colspan="4" class="text-center p-4">No Customers.</td></tr>';
 
-        // Products
         document.getElementById('b-maint-prod').innerHTML = PRODS.map(p => {
             let pData = S.prData[p] || { code: 'N/A', cat: 'PRODUCT' };
             let relatedCases = S.o.filter(o => (o.prods||[]).includes(p)).length;
@@ -1480,7 +1677,6 @@
             return `<tr><td class="font-black">${p}</td><td>${pData.code}</td><td>${pData.cat}</td><td class="font-bold text-green-600">₱${S.pr[p] || 1500}</td><td class="font-bold text-blue-600">${relatedCases}</td><td class="font-bold text-orange-600">${relatedCases}</td><td class="font-bold text-green-600">₱${relatedSalesNum.toLocaleString()}</td><td><button onclick="viewMaintProd('${p}')" class="btn btn-blue !py-1 !px-2 !text-[9px] mr-1">VIEW</button><button onclick="editMaintProd('${p}')" class="btn btn-orange !py-1 !px-2 !text-[9px]">EDIT</button></td></tr>`;
         }).join('');
 
-        // Employees
         document.getElementById('b-maint-emp').innerHTML = S.u.map((x, i) => {
             let compName = `${x.fname||''} ${x.lname||''}`.trim();
             if(!compName) compName = x.n;
@@ -1488,14 +1684,12 @@
         }).join('');
     }
 
-    // Modal Control Functions for Maintenance Updates
     function viewMaintPat(name) {
         editMaintPat(name);
         document.getElementById('maint-pat-title').innerText = "VIEW PATIENT";
         document.getElementById('mpat-save-btn').classList.add('hidden');
         document.querySelectorAll('#mod-maint-pat input, #mod-maint-pat select').forEach(el => el.disabled = true);
     }
-
     function editMaintPat(name) {
         let sample = S.o.find(x => x.pat === name);
         if(!sample) return;
@@ -1509,7 +1703,6 @@
         document.getElementById('mpat-age').value = sample.age || '';
         document.getElementById('mod-maint-pat').classList.add('active');
     }
-
     function saveMaintPat() {
         let oldName = document.getElementById('mpat-old-name').value;
         let newName = document.getElementById('mpat-name').value.toUpperCase();
@@ -1533,12 +1726,11 @@
         document.getElementById('mprod-save-btn').classList.add('hidden');
         document.querySelectorAll('#mod-maint-prod input').forEach(el => el.disabled = true);
     }
-
     function editMaintProd(prod) {
         document.getElementById('maint-prod-title').innerText = "EDIT PRODUCT INFO";
         document.getElementById('mprod-save-btn').classList.remove('hidden');
         document.querySelectorAll('#mod-maint-prod input').forEach(el => el.disabled = false);
-        document.getElementById('mprod-name').disabled = true; // Name is primary key
+        document.getElementById('mprod-name').disabled = true;
 
         let pData = S.prData[prod] || { code: '', cat: 'PRODUCT' };
         document.getElementById('mprod-old-name').value = prod;
@@ -1548,7 +1740,6 @@
         document.getElementById('mprod-cost').value = S.pr[prod] || 1500;
         document.getElementById('mod-maint-prod').classList.add('active');
     }
-
     function saveMaintProd() {
         let prodName = document.getElementById('mprod-old-name').value;
         S.prData[prodName] = {
@@ -1566,7 +1757,6 @@
         document.getElementById('memp-save-btn').classList.add('hidden');
         document.querySelectorAll('#mod-maint-emp input').forEach(el => el.disabled = true);
     }
-
     function editMaintEmp(idx) {
         let x = S.u[idx];
         document.getElementById('maint-emp-title').innerText = "EDIT EMPLOYEE PROFILE";
@@ -1585,7 +1775,6 @@
         document.getElementById('memp-addr').value = x.addr || '';
         document.getElementById('mod-maint-emp').classList.add('active');
     }
-
     function saveMaintEmp() {
         let idx = document.getElementById('memp-idx').value;
         let x = S.u[idx];
@@ -1597,8 +1786,6 @@
         sv(); rMaintenance(); closeModals();
         alert('Employee Profile Saved!');
     }
-
-    // ------------------------------------
 
     function setMaintenance(status) {
         S.sys.maint = {
@@ -1628,20 +1815,20 @@
         let roleSelect = document.getElementById('sa-u-role').value;
         let customRole = document.getElementById('sa-u-role-custom').value.toUpperCase();
         let p = document.getElementById('sa-u-pass').value;
-       
+        
         let d = roleSelect === 'CUSTOM' ? customRole : roleSelect;
 
         if(!n || !p || !d) return alert("All fields are required.");
         if(S.u.find(x=>x.n===n)) return alert("User already exists.");
-       
+        
         let m = ['dashboard'];
         if (d === 'ADMIN') m = ADMIN_DEFAULT_MODS;
         else if (d === 'SYSTEM ARCHITECT') m = [...BASE_MODS, ...S.dynMods, 'architect'];
-        else if (d === 'STAFF') m = ['dashboard', 'sales', 'doctor', 'clinic_support'];
+        else if (d === 'STAFF') m = ['dashboard', 'sales', 'clinic_support'];
         else if (d === 'HR') m = ['dashboard', 'calendar', 'users'];
         else if (d === 'PRODUCTION') m = ['dashboard', 'calendar', 'production'];
         else if (d === 'ACCOUNTING') m = ['dashboard', 'calendar', 'accounting', 'discount'];
-       
+        
         S.u.push({n, d, p, s:'active', m});
         sv();
         document.getElementById('sa-u-name').value='';
@@ -1649,7 +1836,7 @@
         document.getElementById('sa-u-role-custom').value='';
         document.getElementById('sa-u-role').value='ADMIN';
         toggleCustomRole('ADMIN');
-       
+        
         alert(`User [${n}] with role [${d}] Successfully Deployed!`);
         rUsers();
         initChat();
@@ -1689,10 +1876,10 @@
         let m = document.getElementById('sa-sandbox-select').value;
         let code = document.getElementById('sa-sandbox-code').value;
         if(!m) return alert("Select a module first.");
-       
+        
         S.dynModContent[m] = code;
         sv();
-       
+        
         let sec = document.getElementById('p-'+m);
         if(sec) {
             sec.innerHTML = code;
@@ -1707,22 +1894,22 @@
     function deleteSelectedModule() {
         let m = document.getElementById('sa-sandbox-select').value;
         if(!m) return alert("Select a module first.");
-       
+        
         if(BASE_MODS.includes(m)) {
             return alert("WARNING: You cannot delete CORE System Modules. You can only edit their logic.");
         }
-       
+        
         if(confirm(`Are you absolutely sure you want to delete the module [${m.toUpperCase()}]? This will remove it from all users.`)) {
             S.dynMods = S.dynMods.filter(x => x !== m);
             delete S.dynModContent[m];
-           
+            
             let sec = document.getElementById('p-'+m);
             if(sec) sec.remove();
-           
+            
             S.u.forEach(user => {
                 if(user.m) user.m = user.m.filter(mod => mod !== m);
             });
-           
+            
             sv();
             populateSandboxSelect();
             initNav();
@@ -1752,7 +1939,7 @@
     function viewTrashItem(idx) {
         let t = S.trash[idx];
         let displayContent = `<div class="bg-slate-900 text-green-400 p-4 rounded font-mono text-[10px] sm:text-xs overflow-auto max-h-[60vh] whitespace-pre-wrap col-span-1 sm:col-span-2">${JSON.stringify(t.item, null, 4)}</div>`;
-       
+        
         document.getElementById('view-title').innerText = `DATA INSPECTOR (DELETED ITEM)`;
         document.getElementById('view-content').innerHTML = displayContent;
         document.getElementById('view-map-container').classList.add('hidden');
@@ -1799,10 +1986,9 @@
         }
     }
 
-    // DASHBOARD & ANALYTICS
     function dash(){
         let totalRevenue = S.o.reduce((a,b)=>a+parseInt(String(b.tot).replace(/,/g,'')||0),0);
-       
+        
         document.getElementById('stats-grid').innerHTML = `
             <div class="card border-l-4 border-blue-500"><b>CASES</b><h2 class="text-2xl lg:text-3xl font-black">${S.o.length}</h2></div>
             <div class="card border-l-4 border-orange-500"><b>DOCTORS</b><h2 class="text-2xl lg:text-3xl font-black">${S.d.length}</h2></div>
@@ -1812,7 +1998,7 @@
 
         let twoMonthsAgo = new Date();
         twoMonthsAgo.setMonth(twoMonthsAgo.getMonth() - 2);
-       
+        
         let inactiveHtml = '';
         S.d.forEach((doc, i) => {
             let docCases = S.o.filter(o => o.doc === doc.n);
@@ -1821,11 +2007,11 @@
                 let dates = docCases.map(c => new Date(c.date || 0));
                 latestDate = new Date(Math.max.apply(null, dates));
             }
-           
+            
             if(latestDate < twoMonthsAgo) {
                 let lastActive = docCases.length ? latestDate.toISOString().split('T')[0] : 'NEVER SUBMITTED';
                 inactiveHtml += `
-                    <div class="p-2 bg-red-50 border border-red-100 rounded flex justify-between items-center cursor-pointer hover:bg-red-100 transition-colors" onclick="vDoc(${i})">
+                    <div class="p-2 bg-red-50 border border-red-100 rounded flex justify-between items-center cursor-pointer hover:bg-red-100 transition-colors" onclick="go('clinic_support'); switchCSTab('docs'); setTimeout(()=>vDoc(${i}), 300)">
                         <span class="font-bold text-xs text-red-900">${doc.n}</span>
                         <span class="text-[9px] text-red-600 font-black">LAST ACTIVE: ${lastActive}</span>
                     </div>
@@ -1839,7 +2025,7 @@
             let bal = (parseFloat(String(x.tot).replace(/,/g, '')) || 0) - (x.amtPaid || 0);
             return isOngoing && bal > 0;
         });
-       
+        
         let unpaidHtml = unpaidOngoing.map(x => {
             let bal = (parseFloat(String(x.tot).replace(/,/g, '')) || 0) - (x.amtPaid || 0);
             let idx = S.o.indexOf(x);
@@ -1854,10 +2040,11 @@
             `;
         }).join('');
         document.getElementById('alert-unpaid-ongoing').innerHTML = unpaidHtml || '<p class="text-xs text-gray-500 font-bold p-2 text-center border-2 border-dashed border-gray-200 rounded">No unpaid ongoing cases!</p>';
-       
+        
         popSel('dash-loc-select', ["ALL LOCATIONS", ...S.d.map(x=>x.addr).filter(a=>a)]);
-        updateDashMap(); renderSnapshot();
-       
+        updateDashMap();
+        
+        // Dash Charts Setup
         const c1 = document.getElementById('chartForecast').getContext('2d');
         if(window.myC1) window.myC1.destroy();
         window.myC1 = new Chart(c1, {
@@ -1868,9 +2055,18 @@
                     {label: 'Forecasted', data: [120000, 80000, 40000, 60000, 90000], backgroundColor: '#f59e0b'},
                     {label: 'Actual', data: [29100, 45000, 15000, 50000, 75000], backgroundColor: '#10b981'}
                 ]
+            },
+            options: {
+                onClick: (event, elements, chart) => {
+                    if (elements.length > 0) {
+                        const idx = elements[0].index;
+                        const product = chart.data.labels[idx];
+                        openDrilldownModal('Forecast vs Actual: ' + product, S.o.filter(o => (o.prods||[]).includes(product)));
+                    }
+                }
             }
         });
-       
+        
         const c2 = document.getElementById('chartProducts').getContext('2d');
         if(window.myC2) window.myC2.destroy();
         let prodCounts = {};
@@ -1881,6 +2077,47 @@
             data: {
                 labels: topProds.length ? topProds : ["No Data"],
                 datasets: [{ data: topProds.length ? topProds.map(p => prodCounts[p]) : [1], backgroundColor: ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6']}]
+            },
+            options: {
+                onClick: (event, elements, chart) => {
+                    if (elements.length > 0 && topProds.length > 0) {
+                        const idx = elements[0].index;
+                        const product = chart.data.labels[idx];
+                        openDrilldownModal('Top Sales: ' + product, S.o.filter(o => (o.prods||[]).includes(product)));
+                    }
+                }
+            }
+        });
+
+        // Case Payment Status Chart (Comparing Total Paid vs Remaining per Case - Top 10)
+        const cCasePay = document.getElementById('chartCasePayment').getContext('2d');
+        if(window.myCCasePay) window.myCCasePay.destroy();
+        let topCasesForPay = S.o.slice(-10); // get up to 10 latest cases
+        let caseLabels = topCasesForPay.map(o => o.id);
+        let casePaidData = topCasesForPay.map(o => o.amtPaid || 0);
+        let caseRemData = topCasesForPay.map(o => {
+            let tot = parseFloat(String(o.tot).replace(/,/g, '')) || 0;
+            let paid = o.amtPaid || 0;
+            return tot - paid;
+        });
+
+        window.myCCasePay = new Chart(cCasePay, {
+            type: 'bar',
+            data: {
+                labels: caseLabels.length ? caseLabels : ["No Cases"],
+                datasets: [
+                    { label: 'Amount Paid', data: casePaidData.length ? casePaidData : [0], backgroundColor: '#10b981' },
+                    { label: 'Remaining Balance', data: caseRemData.length ? caseRemData : [0], backgroundColor: '#ef4444' }
+                ]
+            },
+            options: {
+                onClick: (event, elements, chart) => {
+                    if (elements.length > 0 && caseLabels.length > 0) {
+                        const idx = elements[0].index;
+                        const caseId = chart.data.labels[idx];
+                        openDrilldownModal('Payment Status: ' + caseId, S.o.filter(o => o.id === caseId));
+                    }
+                }
             }
         });
 
@@ -1893,6 +2130,15 @@
             data: {
                 labels: Object.keys(payCounts),
                 datasets: [{ data: Object.values(payCounts), backgroundColor: ['#189ad3', '#10b981', '#f59e0b', '#a855f7'] }]
+            },
+            options: {
+                onClick: (event, elements, chart) => {
+                    if (elements.length > 0) {
+                        const idx = elements[0].index;
+                        const method = chart.data.labels[idx];
+                        openDrilldownModal('Payment Method: ' + method, S.o.filter(o => o.pay === method));
+                    }
+                }
             }
         });
 
@@ -1900,29 +2146,21 @@
         if(window.myC4) window.myC4.destroy();
         let statusCounts = S.stats.map(s => S.o.filter(o => o.st === s).length);
         window.myC4 = new Chart(c4, {
-            type: 'bar',
+            type: 'doughnut',
             data: {
                 labels: S.stats,
-                datasets: [{ label: 'Cases by Status', data: statusCounts, backgroundColor: '#3b82f6' }]
+                datasets: [{ data: statusCounts, backgroundColor: PCOLORS }]
+            },
+            options: {
+                onClick: (event, elements, chart) => {
+                    if (elements.length > 0) {
+                        const idx = elements[0].index;
+                        const status = chart.data.labels[idx];
+                        openDrilldownModal('Status: ' + status, S.o.filter(o => o.st === status));
+                    }
+                }
             }
         });
-    }
-
-    function renderSnapshot(){
-        let today = new Date().toISOString().split('T')[0];
-        let upcoming = S.o.filter(x => x.st !== 'DONE').sort((a,b) => new Date(a.due) - new Date(b.due));
-        document.getElementById('dash-snap-list').innerHTML = upcoming.map(x => {
-            let dueDay = x.due ? x.due.split('T')[0] : '';
-            return `
-            <div class="snap-item ${dueDay === today ? 'border-red-500 bg-red-50' : ''}" onclick="go('clinic_support'); setTimeout(()=>showCaseDetails(${S.o.indexOf(x)}), 300)">
-                <div class="flex justify-between items-center font-black">
-                    <span style="color: black !important; font-size: 11px;">${x.id}</span>
-                    <span class="text-[9px] ${dueDay === today ? 'text-red-600' : 'text-blue-500'}">${dueDay === today ? 'DUE TODAY' : (x.due ? x.due.replace('T',' ') : '')}</span>
-                </div>
-                <div class="text-[12px] font-bold text-slate-800 uppercase mt-1">${x.pat}</div>
-                <div style="color: black !important;" class="text-[10px] font-black mt-1">${x.st}</div>
-            </div>`;
-        }).join('') || '<div class="text-center text-[10px] opacity-40 mt-10 w-full flex flex-col items-center"><span class="text-3xl mb-2"></span>NO PENDING CASES</div>';
     }
 
     function updateDashMap(){
@@ -1931,34 +2169,40 @@
         document.getElementById('dash-map-global').src = `https://maps.google.com/maps?q=${encodeURIComponent(a)}&t=&z=13&ie=UTF8&iwloc=&output=embed`;
     }
 
-    // DOCTOR
     function rDocs(){
-        let q = document.getElementById('d-search').value.toUpperCase();
+        let q = document.getElementById('d-search')?.value.toUpperCase() || '';
         let fil = S.d.filter(x=>x.n.includes(q) || x.id.includes(q));
-        document.getElementById('b-doc').innerHTML = fil.map((x,i)=>`
-            <tr>
-                <td><img src="${x.pic||''}" class="w-10 h-10 rounded border object-cover"></td>
-                <td>${x.id}</td><td>${x.n}</td><td>${x.tin}</td><td>${x.clinic}</td><td>${x.phone}</td>
-                <td>${x.prc}</td><td>${x.loc||''}</td><td>${x.addr}</td><td>${x.email||'N/A'}</td>
-                <td>
-                    <button onclick="vDoc(${i})" class="text-green-500 mr-2 font-bold p-1">VIEW</button>
-                    <button onclick="editDoc(${i})" class="text-blue-500 mr-2 font-bold p-1">EDIT</button>
-                    <button onclick="del('d',${i},event)" class="text-red-500 font-bold p-1">DEL</button>
-                </td>
-            </tr>
-        `).join('');
-       
-        // Re-render sales if we edit customers (Doctors) from Sales Module directly
+        let tbody = document.getElementById('b-doc');
+        if (tbody) {
+            tbody.innerHTML = fil.map((x,i)=>`
+                <tr class="hover:bg-gray-50 border-b transition-colors">
+                    <td class="px-2 py-2 text-center"><img src="${x.pic||''}" class="w-8 h-8 rounded-full border object-cover inline-block" onerror="this.style.display='none'"></td>
+                    <td class="font-bold text-[11px] text-gray-800">${x.id}</td>
+                    <td class="font-bold text-[11px] text-[#189ad3]">${x.n}</td>
+                    <td class="text-[10px] text-gray-600">${x.tin || '-'}</td>
+                    <td class="text-[10px] text-gray-600">${x.prc || '-'}</td>
+                    <td class="text-[10px] text-gray-600">${x.clinic || '-'}</td>
+                    <td class="text-[10px] text-gray-600">${x.phone || '-'}</td>
+                    <td class="text-[10px] text-gray-600">${x.loc || '-'}</td>
+                    <td class="text-[10px] text-gray-600 truncate max-w-[150px]">${x.addr || '-'}</td>
+                    <td class="whitespace-nowrap">
+                        <button onclick="vDoc(${i})" class="btn btn-blue !py-1 !px-2 !text-[9px] mr-1">VIEW</button>
+                        <button onclick="editDoc(${i})" class="btn btn-orange !py-1 !px-2 !text-[9px] mr-1">EDIT</button>
+                        <button onclick="del('d',${i},event)" class="btn btn-red !py-1 !px-2 !text-[9px]">DEL</button>
+                    </td>
+                </tr>
+            `).join('') || `<tr><td colspan="10" class="text-center p-4 text-xs font-bold text-gray-400">No Doctors Found.</td></tr>`;
+        }
+        
         if(document.getElementById('p-sales').classList.contains('active')) rSales();
     }
-   
+    
     function vDoc(i){
         let x = S.d[i]; document.getElementById('view-title').innerText = "Profile";
         document.getElementById('view-content').innerHTML = `
             <div class="col-span-1 sm:col-span-2 flex justify-center mb-4"><img src="${x.pic||''}" class="w-32 h-32 rounded-full border-4 border-blue-500 object-cover shadow-lg" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' viewBox=\\'0 0 100 100\\'><rect width=\\'100\\' height=\\'100\\' fill=\\'%23e2e8f0\\'/><text x=\\'50\\' y=\\'55\\' font-size=\\'30\\' text-anchor=\\'middle\\' fill=\\'%2394a3b8\\'></text></svg>'"></div>
             <div class="bg-slate-50 p-2 rounded border"><b>NAME:</b> ${x.n}</div>
             <div class="bg-slate-50 p-2 rounded border"><b>ID:</b> ${x.id}</div>
-            <div class="bg-slate-50 p-2 rounded border"><b>EMAIL:</b> ${x.email||'N/A'}</div>
             <div class="bg-slate-50 p-2 rounded border"><b>TIN:</b> ${x.tin}</div>
             <div class="bg-slate-50 p-2 rounded border"><b>PRC:</b> ${x.prc}</div>
             <div class="bg-slate-50 p-2 rounded border"><b>CLINIC:</b> ${x.clinic}</div>
@@ -1984,7 +2228,6 @@
             prc: document.getElementById('d-prc').value,
             clinic: document.getElementById('d-clinic').value,
             phone: document.getElementById('d-phone').value,
-            email: document.getElementById('d-email').value,
             loc: document.getElementById('d-loc').value,
             addr: document.getElementById('d-addr').value,
             pic: document.getElementById('d-img-prev').src
@@ -2004,7 +2247,6 @@
         document.getElementById('d-prc').value=x.prc;
         document.getElementById('d-clinic').value=x.clinic;
         document.getElementById('d-phone').value=x.phone;
-        document.getElementById('d-email').value=x.email||'';
         popSel('d-loc', S.locs);
         document.getElementById('d-loc').value=x.loc;
         document.getElementById('d-addr').value=x.addr;
@@ -2016,7 +2258,7 @@
     function rAcc() {
         let inProdCases = S.o.filter(x => x.st === 'IN PRODUCTION' || x.st === 'ONGOING').length;
         let discountedCases = S.o.filter(x => x.v && x.v !== 'NONE').length;
-       
+        
         let accStatsHtml = `
             <div class="card border-l-4 border-blue-500"><b>DOCTORS/CUSTOMERS</b><h2 class="text-2xl lg:text-3xl font-black">${S.d.length}</h2></div>
             <div class="card border-l-4 border-orange-500"><b>CASES</b><h2 class="text-2xl lg:text-3xl font-black">${S.o.length}</h2></div>
@@ -2028,12 +2270,12 @@
 
         let filter = document.getElementById('acc-filter').value;
         let tbody = document.getElementById('b-receivables');
-       
+        
         let rows = S.o.map((x, i) => {
             let tot = parseFloat(String(x.tot).replace(/,/g, '')) || 0;
             let paid = x.amtPaid || 0;
             let bal = tot - paid;
-           
+            
             let currentStatus = x.manualPayStatus ? x.manualPayStatus : (bal <= 0 ? 'FULLY PAID' : (paid > 0 ? 'PARTIAL PAYMENT' : 'UNPAID'));
 
             if(filter === 'UNPAID' && (currentStatus === 'FULLY PAID' || currentStatus === 'PAID')) return '';
@@ -2046,7 +2288,7 @@
                 <td><button onclick="openEditPayStatus(${i}, event)" class="btn btn-blue !py-1 !px-2 text-[9px]">EDIT</button></td>
             </tr>`;
         }).join('');
-       
+        
         if(tbody) tbody.innerHTML = rows || `<tr><td colspan="7" class="text-center p-6 text-gray-400 font-bold">No receivables matching filter.</td></tr>`;
 
         let bAcct = document.getElementById('b-acct');
@@ -2064,7 +2306,7 @@
         currentPayCaseIdx = idx;
         let x = S.o[idx];
         let tbody = document.getElementById('b-payments');
-       
+        
         let rows = document.querySelectorAll('#b-receivables tr');
         rows.forEach(r => r.classList.remove('bg-blue-50'));
         if(event && event.currentTarget) event.currentTarget.classList.add('bg-blue-50');
@@ -2094,13 +2336,13 @@
         let x = S.o[i];
         document.getElementById('eps-idx').value = i;
         document.getElementById('eps-id').value = x.id;
-       
+        
         let tot = parseFloat(String(x.tot).replace(/,/g, '')) || 0;
         let paid = x.amtPaid || 0;
         let bal = tot - paid;
-       
+        
         let currentStatus = x.manualPayStatus ? x.manualPayStatus : (bal <= 0 ? 'FULLY PAID' : (paid > 0 ? 'PARTIAL PAYMENT' : 'UNPAID'));
-       
+        
         document.getElementById('eps-status').value = currentStatus;
         document.getElementById('mod-edit-pay-status').classList.add('active');
     }
@@ -2119,25 +2361,25 @@
 
     function openPaymentModal() {
         if(currentPayCaseIdx === -1) return alert("Please select a Case from the Account Receivables list first.");
-       
+        
         let x = S.o[currentPayCaseIdx];
         document.getElementById('pay-ac-num').value = x.id;
         document.getElementById('pay-dentist').value = x.doc;
-       
+        
         let tot = parseFloat(String(x.tot).replace(/,/g, '')) || 0;
         document.getElementById('pay-tot').value = "₱" + tot.toLocaleString();
-       
+        
         let today = new Date();
         today.setMinutes(today.getMinutes() - today.getTimezoneOffset());
         document.getElementById('pay-date').value = today.toISOString().split('T')[0];
-       
+        
         document.getElementById('pay-amt').value = '';
         document.getElementById('pay-staff').value = '';
         document.getElementById('pay-or').value = '';
         document.getElementById('pay-proof').value = '';
         document.getElementById('pay-proof-img').src = '';
         document.getElementById('pay-proof-img').classList.add('hidden');
-       
+        
         calcPayBal();
         document.getElementById('mod-payment').classList.add('active');
     }
@@ -2148,7 +2390,7 @@
         let tot = parseFloat(String(x.tot).replace(/,/g, '')) || 0;
         let alreadyPaid = x.amtPaid || 0;
         let inputAmt = parseFloat(document.getElementById('pay-amt').value) || 0;
-       
+        
         let remaining = tot - alreadyPaid - inputAmt;
         document.getElementById('pay-bal').innerText = remaining.toLocaleString();
     }
@@ -2166,10 +2408,10 @@
 
         let x = S.o[currentPayCaseIdx];
         if(!x.payments) x.payments = [];
-       
+        
         x.payments.push({ date: pDate, amt: amt, method: pMethod, staff: pStaff, or: pOr, proof: pProof });
         x.amtPaid = (x.amtPaid || 0) + amt;
-       
+        
         x.manualPayStatus = null;
 
         sv();
@@ -2180,9 +2422,8 @@
         alert("Payment Recorded Successfully!");
     }
 
-    // CLINIC SUPPORT
     function hideClinicSupportFields(hide) {
-        ['wrap-o-comp', 'wrap-o-due', 'wrap-o-ret'].forEach(id => {
+        ['wrap-o-comp', 'wrap-o-ret'].forEach(id => {
             let el = document.getElementById(id);
             if(el) {
                 if (hide) el.classList.add('hidden');
@@ -2204,8 +2445,7 @@
     function rOrd() {
         let q = document.getElementById('o-search-cs')?.value.toUpperCase() || '';
         let fil = S.o.map((x, i) => ({...x, originalIdx: i})).filter(x => x.id.includes(q) || x.pat.includes(q) || (x.doc && x.doc.toUpperCase().includes(q)));
-       
-        // 1. Populate Case List
+        
         let caseListHtml = '';
         let allStatuses = ["NEW", "IN PRODUCTION", "TO SHIP", "IN TRANSIT", "DELIVERED", "DONE", "COMPLETE", "CANCELLED"];
         let uniqueStatuses = [...new Set(S.o.map(x => x.st.toUpperCase()))];
@@ -2232,7 +2472,6 @@
         let tbodyCaseList = document.getElementById('cs-case-list');
         if (tbodyCaseList) tbodyCaseList.innerHTML = caseListHtml || `<tr><td colspan="4" class="text-center p-6 text-gray-400 font-bold">No active cases found.</td></tr>`;
 
-        // 2. Populate Completed List
         let completedCases = fil.filter(x => ['DONE', 'COMPLETE', 'DELIVERED'].includes(x.st.toUpperCase()));
         let compListHtml = completedCases.map(x => {
             let isActive = selectedClinicSupportIdx === x.originalIdx ? 'bg-green-100' : '';
@@ -2252,7 +2491,6 @@
         let tbodyCompList = document.getElementById('cs-completed-list');
         if (tbodyCompList) tbodyCompList.innerHTML = compListHtml || `<tr><td colspan="8" class="text-center p-6 text-gray-400 font-bold">No completed job orders.</td></tr>`;
 
-        // 3. Setup Case Details default/update
         if (selectedClinicSupportIdx !== -1 && S.o[selectedClinicSupportIdx]) {
             showCaseDetails(selectedClinicSupportIdx);
         } else {
@@ -2270,20 +2508,17 @@
 
         document.querySelectorAll('#cs-case-list tr').forEach(tr => tr.classList.remove('bg-blue-100', 'border-l-blue-500'));
         document.querySelectorAll('#cs-completed-list tr').forEach(tr => tr.classList.remove('bg-green-100'));
-       
+        
         let targetRow1 = document.querySelector(`#cs-case-list tr[onclick="showCaseDetails(${idx})"]`);
         if (targetRow1) targetRow1.classList.add('bg-blue-100', 'border-l-blue-500');
-       
+        
         let targetRow2 = document.querySelector(`#cs-completed-list tr[onclick="showCaseDetails(${idx})"]`);
         if (targetRow2) targetRow2.classList.add('bg-green-100');
 
         let pane = document.getElementById('cs-details-pane');
         let actions = document.getElementById('cs-action-btns');
         if(!pane || !actions) return;
-       
-        let loc = S.d.find(d => d.n === x.doc)?.addr || 'Philippines';
-        let mapUrl = `https://maps.google.com/maps?q=$${encodeURIComponent(loc)}&output=embed`;
-
+        
         let costPerUnit = (x.prods && x.prods.length > 0) ? (S.pr[x.prods[0]] || 0) : 0;
         let qty = x.qty || 1;
         let baseCost = costPerUnit * qty;
@@ -2296,80 +2531,109 @@
         let totCostNum = parseFloat(String(x.tot).replace(/,/g, '')) || 0;
         let amtPaid = x.amtPaid || 0;
         let pStat = x.manualPayStatus || (totCostNum <= 0 ? 'FULLY PAID' : (amtPaid > 0 ? 'PARTIAL PAYMENT' : 'UNPAID'));
-       
+        
         pane.innerHTML = `
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 pb-10">
-                <div class="flex flex-col gap-6">
-                    <div class="h-56 border rounded-xl overflow-hidden bg-gray-100 relative shadow-sm">
-                        <iframe width="100%" height="100%" frameborder="0" src="${mapUrl}"></iframe>
-                        <div class="absolute bottom-3 left-3 bg-white/95 p-3 rounded-lg shadow-lg">
-                            <span class="block text-xl font-black text-gray-800">${x.id}</span>
-                            <span class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">${x.st}</span>
+            <div class="flex flex-col gap-4 pb-10 max-w-4xl mx-auto">
+                
+                <div class="bg-white p-5 border rounded-xl shadow-sm">
+                    <div class="flex justify-between items-start mb-4 border-b pb-2">
+                        <h3 class="font-black text-2xl text-gray-800">${x.id}</h3>
+                        <span class="px-3 py-1 text-xs font-black uppercase rounded bg-blue-100 text-blue-800">${x.st}</span>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+                        <div><strong class="text-gray-500 text-[10px] uppercase tracking-widest block">Patient Name</strong> <span class="font-bold text-gray-800">${x.pat}</span></div>
+                        <div><strong class="text-gray-500 text-[10px] uppercase tracking-widest block">Dentist Name</strong> <span class="font-bold text-gray-800">${x.doc || '-'}</span></div>
+                        <div><strong class="text-gray-500 text-[10px] uppercase tracking-widest block">Received Date</strong> <span class="font-bold text-gray-800">${x.date ? x.date.split('T')[0] : '-'}</span></div>
+                        <div><strong class="text-gray-500 text-[10px] uppercase tracking-widest block">Target Delivery</strong> <span class="font-bold text-gray-800">${x.due ? x.due.split('T')[0] : '-'}</span></div>
+                    </div>
+                </div>
+
+                <div class="bg-gray-50 p-5 border rounded-xl shadow-sm">
+                    <h3 class="font-black text-sm uppercase text-gray-700 tracking-widest mb-3">Delivery Details</h3>
+                    <div class="grid grid-cols-1 gap-4 text-sm">
+                        <div><strong class="text-gray-500 text-[10px] uppercase tracking-widest block">Person In Charge</strong> <span class="font-bold text-gray-800 uppercase">${x.pic || '-'}</span></div>
+                        <div>
+                            <strong class="text-gray-500 text-[10px] uppercase tracking-widest block mb-1">Reason for Return (If Applicable)</strong>
+                            <textarea id="cs-ret-reason" class="inp w-full h-16">${x.retReason || ''}</textarea>
                         </div>
                     </div>
-                   
-                    <div>
+                </div>
+
+                <details class="bg-white border rounded-xl shadow-sm overflow-hidden group">
+                    <summary class="font-black text-sm uppercase text-gray-700 tracking-widest p-5 bg-gray-50 cursor-pointer outline-none hover:bg-gray-100 transition-colors">
+                        Job Order Details / Cost <span class="text-[10px] text-blue-500 ml-2">(Click to Expand)</span>
+                    </summary>
+                    <div class="p-5 border-t">
                         <table class="w-full text-sm text-left">
                             <tbody>
-                                <tr class="border-b"><th class="py-3 text-[10px] font-black text-gray-400 uppercase tracking-widest w-1/3">Patient Name</th><td class="py-3 font-bold text-gray-700">${x.pat}</td></tr>
-                                <tr class="border-b"><th class="py-3 text-[10px] font-black text-gray-400 uppercase tracking-widest">Dentist Name</th><td class="py-3 font-bold text-gray-700">${x.doc || '-'}</td></tr>
-                                <tr class="border-b"><th class="py-3 text-[10px] font-black text-gray-400 uppercase tracking-widest">Received Date</th><td class="py-3 font-bold text-gray-700">${x.date ? x.date.split('T')[0] : '-'}</td></tr>
-                                <tr><th class="py-3 text-[10px] font-black text-gray-400 uppercase tracking-widest">Target Delivery Date</th><td class="py-3 font-bold text-gray-700">${x.due ? x.due.split('T')[0] : '-'}</td></tr>
+                                <tr class="border-b"><th class="py-2 text-[10px] font-black text-gray-400 uppercase tracking-widest">Product</th><td class="py-2 font-bold text-right text-gray-800">${(x.prods||[]).join(', ')}</td></tr>
+                                <tr class="border-b"><th class="py-2 text-[10px] font-black text-gray-400 uppercase tracking-widest">Shade</th><td class="py-2 font-bold text-right text-gray-800">${x.shade || 'N/A'}</td></tr>
+                                <tr class="border-b"><th class="py-2 text-[10px] font-black text-gray-400 uppercase tracking-widest">Number of Units</th><td class="py-2 font-bold text-right text-gray-600">${qty}</td></tr>
+                                <tr class="border-b"><th class="py-2 text-[10px] font-black text-gray-400 uppercase tracking-widest">Base Cost</th><td class="py-2 font-bold text-right text-gray-600">₱${baseCost.toLocaleString()}</td></tr>
+                                ${discountAmt > 0 ? `<tr class="border-b"><th class="py-2 text-[10px] font-black text-gray-400 uppercase tracking-widest">Discount</th><td class="py-2 font-bold text-right text-red-500">-₱${discountAmt.toLocaleString()}</td></tr>` : ''}
+                                <tr class="border-b"><th class="py-3 text-[10px] font-black text-gray-400 uppercase tracking-widest">Total Cost</th><td class="py-3 font-black text-blue-700 text-right text-lg">₱${x.tot}</td></tr>
+                                <tr><th class="py-2 text-[10px] font-black text-gray-400 uppercase tracking-widest">Payment Status</th><td class="py-2 font-bold text-right"><span class="px-2 py-1 bg-gray-100 rounded text-xs border uppercase">${pStat}</span></td></tr>
                             </tbody>
                         </table>
                     </div>
+                </details>
+
+                <div class="bg-white p-5 border rounded-xl shadow-sm">
+                    <h3 class="font-black text-sm uppercase text-gray-700 tracking-widest mb-3">Related Tasks</h3>
+                    <ul class="list-disc pl-5 text-sm text-gray-600 font-semibold space-y-1">
+                        <li>Assign to Technician: <span class="text-blue-600">${x.asn || 'Pending'}</span></li>
+                        <li>Payment Tracking: <span class="${pStat.includes('PAID') ? 'text-green-600' : 'text-red-500'}">${pStat}</span></li>
+                        <li>Update Case Status from <span class="text-gray-800">${x.st}</span> to next stage</li>
+                    </ul>
                 </div>
-               
-                <div class="flex flex-col gap-6">
-                    <div class="border rounded-xl shadow-sm overflow-hidden">
-                        <div class="bg-gray-50 p-3 border-b">
-                            <h4 class="text-xs font-black text-gray-700 uppercase tracking-widest">Cost Details</h4>
-                        </div>
-                        <div class="p-4">
-                            <table class="w-full text-sm text-left">
-                                <tbody>
-                                    <tr class="border-b"><th class="py-2 text-[10px] font-black text-gray-400 uppercase tracking-widest">Product</th><td class="py-2 font-bold text-right text-gray-800">${(x.prods||[]).join(', ')}</td></tr>
-                                    <tr class="border-b"><th class="py-2 text-[10px] font-black text-gray-400 uppercase tracking-widest">Cost Per Unit</th><td class="py-2 font-bold text-right text-gray-600">₱${costPerUnit.toLocaleString()}</td></tr>
-                                    <tr class="border-b"><th class="py-2 text-[10px] font-black text-gray-400 uppercase tracking-widest">Number of Units</th><td class="py-2 font-bold text-right text-gray-600">${qty}</td></tr>
-                                    <tr class="border-b"><th class="py-2 text-[10px] font-black text-gray-400 uppercase tracking-widest">Number of Orders</th><td class="py-2 font-bold text-right text-gray-600">1</td></tr>
-                                    <tr class="border-b"><th class="py-2 text-[10px] font-black text-gray-400 uppercase tracking-widest">Cost</th><td class="py-2 font-bold text-right text-gray-600">₱${baseCost.toLocaleString()}</td></tr>
-                                    ${discountAmt > 0 ? `<tr class="border-b"><th class="py-2 text-[10px] font-black text-gray-400 uppercase tracking-widest">Discount</th><td class="py-2 font-bold text-right text-red-500">-₱${discountAmt.toLocaleString()}</td></tr>` : ''}
-                                    <tr class="border-b"><th class="py-3 text-[10px] font-black text-gray-400 uppercase tracking-widest">Total Cost</th><td class="py-3 font-black text-blue-700 text-right text-lg">₱${x.tot}</td></tr>
-                                    <tr><th class="py-2 text-[10px] font-black text-gray-400 uppercase tracking-widest">Payment Status</th><td class="py-2 font-bold text-right"><span class="px-2 py-1 bg-gray-100 rounded text-xs border uppercase">${pStat}</span></td></tr>
-                                </tbody>
-                            </table>
-                        </div>
+
+                <div class="bg-white p-5 border rounded-xl shadow-sm">
+                    <h3 class="font-black text-sm uppercase text-gray-700 tracking-widest mb-3">Job Order Distribution (Visual)</h3>
+                    <div class="w-full h-48">
+                        <canvas id="cs-jo-chart"></canvas>
                     </div>
-                   
-                    <div class="border rounded-xl shadow-sm overflow-hidden">
-                        <div class="bg-gray-50 p-3 border-b">
-                            <h4 class="text-xs font-black text-gray-700 uppercase tracking-widest">Delivery Details</h4>
-                        </div>
-                        <div class="p-4">
-                            <table class="w-full text-sm text-left">
-                                <tbody>
-                                    <tr class="border-b"><th class="py-2 text-[10px] font-black text-gray-400 uppercase tracking-widest w-1/3">Person In Charge</th><td class="py-2 font-bold text-right text-gray-700 uppercase">${x.asn || '-'}</td></tr>
-                                    <tr><th class="py-2 text-[10px] font-black text-gray-400 uppercase tracking-widest">Location</th><td class="py-2 font-bold text-right text-gray-700">${loc}</td></tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+                </div>
+
+                <div class="flex justify-end mt-4">
+                    <button onclick="saveClinicDetails(${idx})" class="btn btn-green px-10 py-3 shadow-lg">SAVE CLINIC DETAILS</button>
                 </div>
             </div>
         `;
 
         actions.innerHTML = `
             <button onclick="editClinicSupportOrd(${idx})" class="btn btn-blue !py-2 px-4 shadow-sm text-[10px] uppercase">
-                <svg class="w-3 h-3 mr-1 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg> Edit
+                <svg class="w-3 h-3 mr-1 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg> Edit Form
             </button>
             <button onclick="thermal(${idx})" class="btn btn-orange !py-2 px-4 shadow-sm text-[10px] uppercase">Receipt</button>
             <button onclick="del('o',${idx},event)" class="btn btn-red !py-2 px-4 shadow-sm text-[10px] uppercase">Delete</button>
         `;
         actions.classList.remove('hidden');
+
+        // Render isolated JO chart
+        let joCtx = document.getElementById('cs-jo-chart');
+        if(joCtx) {
+            if(window.csJoChart) window.csJoChart.destroy();
+            let pData = x.prods || ['Unspecified'];
+            window.csJoChart = new Chart(joCtx.getContext('2d'), {
+                type: 'bar',
+                data: {
+                    labels: pData,
+                    datasets: [{ label: 'Units', data: pData.map(() => x.qty || 1), backgroundColor: '#3b82f6' }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true } } }
+            });
+        }
+    }
+
+    function saveClinicDetails(idx) {
+        let x = S.o[idx];
+        if(!x) return;
+        x.retReason = document.getElementById('cs-ret-reason').value;
+        sv();
+        alert('Clinic Support Details Saved!');
     }
 
     function saveOrd() {
-        // FIXED THE BUG RIGHT HERE! Removed 'o-due' from strict requirements if it is hidden in Clinic Support mode
         let reqFields = ['o-pat', 'o-doc', 'o-date', 'o-qty'];
         if (!document.getElementById('wrap-o-due').classList.contains('hidden')) {
             reqFields.push('o-due');
@@ -2387,12 +2651,12 @@
         if (prs.length === 0) { alert("Please Select at least one Product!"); return false; }
 
         let i = document.getElementById('o-idx').value;
-       
+        
         let pImgEl = document.getElementById('o-pat-img');
         let formImgEl = document.getElementById('o-form-img');
         let qrImgEl = document.getElementById('qr-img');
         let stlNameEl = document.getElementById('o-stl-name');
-       
+        
         let obj = {
             id: document.getElementById('o-id').value,
             pic: document.getElementById('o-pic').value,
@@ -2412,12 +2676,12 @@
             rem: document.getElementById('o-rem').value,
             doc: document.getElementById('o-doc').value,
             prods: prs,
-           
+            
             pImg: pImgEl.src && pImgEl.src.startsWith('data:') ? pImgEl.src : "",
             qrImg: qrImgEl.src && qrImgEl.src.startsWith('data:') ? qrImgEl.src : "",
             formImg: formImgEl.src && formImgEl.src.startsWith('data:') ? formImgEl.src : "",
             stlName: stlNameEl.innerText === 'NO FILE' ? '' : stlNameEl.innerText,
-           
+            
             asn: (i !== "" ? S.o[i].asn : ""),
             amtPaid: (i !== "" ? (S.o[i].amtPaid || 0) : 0),
             payments: (i !== "" ? (S.o[i].payments || []) : [])
@@ -2425,11 +2689,11 @@
 
         if (i === "") S.o.push(obj); else S.o[i] = Object.assign(S.o[i], obj);
         sv(); rOrd(); rProd(); dash(); if(typeof rAcc === 'function') rAcc();
-       
+        
         if(document.getElementById('p-calendar').classList.contains('active')) {
             initFullCal();
         }
-       
+        
         closeModals(); alert("CASE SAVED SUCCESSFULLY!");
         return true;
     }
@@ -2437,7 +2701,7 @@
     function editOrd(i) {
         let x = S.o[i]; modal('ord');
         hideClinicSupportFields(false);
-       
+        
         document.getElementById('o-idx').value = i;
         document.getElementById('o-id').value = x.id;
         document.getElementById('o-pic').value = x.pic || '';
@@ -2451,12 +2715,12 @@
         document.getElementById('o-stat').value = x.st;
         document.getElementById('o-qty').value = x.qty;
         document.getElementById('o-rem').value = x.rem;
-       
+        
         document.getElementById('o-shade').value = x.shade || '';
         document.getElementById('o-v').value = x.v || '';
-       
+        
         document.getElementById('o-stl-name').innerText = x.stlName || 'NO FILE';
-       
+        
         if (x.formImg && x.formImg.startsWith('data:image')) {
             document.getElementById('o-form-img').src = x.formImg;
             document.getElementById('o-form-img').classList.remove('hidden');
@@ -2464,7 +2728,7 @@
             document.getElementById('o-form-img').src = '';
             document.getElementById('o-form-img').classList.add('hidden');
         }
-       
+        
         document.getElementById('o-pay').value = x.pay || 'CASH';
         toggleQR();
         if(x.qrImg && x.qrImg.startsWith('data:image')) {
@@ -2472,10 +2736,10 @@
         } else {
             document.getElementById('qr-img').src = '';
         }
-       
+        
         let ctypeMatch = S.ctypes.find(c => x.id.startsWith(c));
         if(ctypeMatch) document.getElementById('o-ctype').value = ctypeMatch;
-       
+        
         if(x.pImg && x.pImg.startsWith('data:image')) {
             document.getElementById('o-pat-img').src = x.pImg;
             document.getElementById('o-pat-img').classList.remove('hidden');
@@ -2513,7 +2777,7 @@
             r.readAsDataURL(i.files[0]);
         }
     }
-   
+    
     function upPatImg(inp) {
         if (inp.files && inp.files[0]) {
             let r = new FileReader();
@@ -2535,13 +2799,13 @@
             r.readAsDataURL(inp.files[0]);
         }
     }
-   
+    
     function toggleTooth(btn){
         btn.classList.toggle('active');
         if(!btn.classList.contains('active')) btn.style.background='#eee';
         calcPrice();
     }
-   
+    
     function calcPrice(){
         let sub=0, color='#eee', activeTeeth = document.querySelectorAll('.tooth-btn.active').length || 1;
         document.querySelectorAll('.ochk:checked').forEach(c=>{
@@ -2549,9 +2813,9 @@
             color = PCOLORS[PRODS.indexOf(c.value) % PCOLORS.length];
         });
         document.querySelectorAll('.tooth-btn.active').forEach(t=>t.style.background=color);
-       
+        
         let qty = parseInt(document.getElementById('o-qty').value) || 1;
-       
+        
         let discPct = 0;
         let selectedDiscount = document.getElementById('o-v').value;
         if(selectedDiscount) {
@@ -2571,14 +2835,14 @@
             breakdownEl.innerText = bdText;
         }
     }
-   
+    
     function setSex(v){
         document.getElementById('o-sex').value=v;
         document.querySelectorAll('.sex-btn').forEach(b=>b.classList.remove('active'));
         if(v==='M') document.getElementById('sex-m').classList.add('active');
         if(v==='F') document.getElementById('sex-f').classList.add('active');
     }
-   
+    
     function addOpt(t){
         let v=prompt('New Value:');
         if(v){
@@ -2604,25 +2868,28 @@
         if(S.stats.includes(currentVal)) sel.value = currentVal;
         else sel.value = 'ALL';
     }
-   
+    
     function updateMap(){
         let a = document.getElementById('d-addr').value;
         if(a) document.getElementById('doc-map').src = `https://maps.google.com/maps?q=${encodeURIComponent(a)}&output=embed`;
     }
-   
+    
     function onTypeChange(clicked){
         let t = document.getElementById('o-ctype').value;
         let count = S.o.filter(x => x.id && x.id.startsWith(t)).length;
         document.getElementById('o-id').value = `${t}0${1655 + count}`;
         if(clicked && t) alert(`SYSTEM: Case Type switched to ${t}`);
     }
-   
-    function fillDocInfo(){ let d=S.d.find(x=>x.n===document.getElementById('o-doc').value); if(d){ document.getElementById('o-pic').value=d.phone; }}
+    
+    function fillDocInfo(){ 
+    }
+    
     function toggleQR(){ document.getElementById('qr-box').classList.toggle('hidden', document.getElementById('o-pay').value==='CASH'); }
-   
+    
     function resetSys(){
         if(confirm('WARNING: Factory Reset? \n\nThis will DELETE all Cases, Doctors, Discounts, and Files.\n\n')){
             S.d = []; S.o = []; S.v = []; S.trash = []; S.msg = []; S.pr = {};
+            S.arc24 = []; S.arc25 = [];
             PRODS.forEach(p => { S.pr[p] = 1500; });
             sv();
             alert('System data wiped.');
@@ -2636,7 +2903,7 @@
             location.reload();
         }
     }
-   
+    
     function modal(t){
         closeModals();
         if(t==='doc'){
@@ -2650,7 +2917,7 @@
             if (S.d.length === 0) return alert("PLEASE ADD A DOCTOR FIRST");
             document.querySelectorAll('#mod-ord input:not([readonly]):not([type="file"])').forEach(i=>i.value='');
             hideClinicSupportFields(false);
-           
+            
             document.getElementById('o-stl-name').innerText = 'NO FILE';
             document.getElementById('o-form-img').src = '';
             document.getElementById('o-form-img').classList.add('hidden');
@@ -2660,7 +2927,7 @@
             document.getElementById('o-sex').value = "";
             document.getElementById('qr-img').src = "";
             document.querySelectorAll('.sex-btn').forEach(b => b.classList.remove('active'));
-           
+            
             popSel('o-doc', S.d.map(x=>x.n));
             popSel('o-stat', S.stats);
             popSel('o-ctype', S.ctypes);
@@ -2674,12 +2941,11 @@
             let th='';
             for(let i=1;i<=32;i++) th+=`<div class="tooth-btn shadow-sm" onclick="toggleTooth(this)">${i}</div>`;
             document.getElementById('o-teeth').innerHTML = th;
-           
-            // EXACT CURRENT TIME FIX HERE
+            
             let now = new Date();
             let tzOffset = now.getTimezoneOffset() * 60000;
             document.getElementById('o-date').value = (new Date(now - tzOffset)).toISOString().slice(0, 16);
-           
+            
             onTypeChange(false);
             document.getElementById('mod-ord').classList.add('active');
             calcPrice();
@@ -2694,7 +2960,7 @@
             if (filterVal !== 'ALL' && x.st !== filterVal) return;
 
             let isActive = selectedProdIdx === i ? 'pay-row-active' : 'cursor-pointer hover:bg-slate-50 transition-colors';
-           
+            
             let statusColor = 'bg-gray-100 text-gray-800 border-gray-200';
             if(x.st === 'NEW') statusColor = 'bg-red-100 text-red-800 border-red-200';
             if(x.st === 'IN PRODUCTION' || x.st === 'ONGOING') statusColor = 'bg-blue-100 text-blue-800 border-blue-200';
@@ -2726,15 +2992,18 @@
 
     function renderProdDetails() {
         let pane = document.getElementById('prod-details-pane');
-        if(!pane) return;
+        let editBtn = document.getElementById('pd-edit-btn');
+        if(!pane || !editBtn) return;
 
         if (selectedProdIdx === -1 || !S.o[selectedProdIdx]) {
             pane.innerHTML = `<div class="text-center text-gray-400 font-bold mt-20 text-[10px] uppercase tracking-widest border-2 border-dashed p-6 rounded-xl bg-gray-50">Select a Case to View Details</div>`;
+            editBtn.classList.add('hidden');
             return;
         }
 
+        editBtn.classList.remove('hidden');
         let x = S.o[selectedProdIdx];
-       
+        
         let statOpts = S.stats.map(s => `<option value="${s}" ${x.st === s ? 'selected' : ''}>${s}</option>`).join('');
         let shadeOpts = `<option value="">-- SELECT SHADE --</option>` + S.shades.map(s => `<option value="${s}" ${x.shade === s ? 'selected' : ''}>${s}</option>`).join('');
         let prodOpts = `<option value="">-- SELECT PRODUCT --</option>` + PRODS.map(p => `<option value="${p}" ${(x.prods||[]).includes(p) ? 'selected' : ''}>${p}</option>`).join('');
@@ -2748,11 +3017,11 @@
                     <div class="flex flex-col gap-4">
                         <div class="flex items-center">
                             <div class="w-1/3 text-[10px] text-gray-500 font-bold uppercase tracking-wide">Status</div>
-                            <div class="w-2/3"><select id="pd-st" class="inp !py-2 !px-3 font-bold text-gray-700">${statOpts}</select></div>
+                            <div class="w-2/3"><select id="pd-st" class="inp !py-2 !px-3 font-bold text-gray-700 pd-editable" disabled>${statOpts}</select></div>
                         </div>
                         <div class="flex items-center">
                             <div class="w-1/3 text-[10px] text-gray-500 font-bold uppercase tracking-wide">Case Number</div>
-                            <div class="w-2/3"><input id="pd-id" class="inp !py-2 !px-3 font-black text-[#189ad3]" value="${x.id}"></div>
+                            <div class="w-2/3"><input id="pd-id" class="inp !py-2 !px-3 font-black text-[#189ad3] bg-gray-100" value="${x.id}" readonly disabled></div>
                         </div>
                         <div class="flex mt-1">
                             <div class="w-1/3 text-[10px] text-gray-500 font-bold uppercase tracking-wide">Dentist Name</div>
@@ -2764,15 +3033,19 @@
                         </div>
                         <div class="flex items-center mt-1">
                             <div class="w-1/3 text-[10px] text-gray-500 font-bold uppercase tracking-wide">Date Submitted</div>
-                            <div class="w-2/3"><input type="date" id="pd-date" class="inp !py-2 !px-3 font-bold text-gray-700" value="${x.date ? x.date.split('T')[0] : ''}"></div>
+                            <div class="w-2/3"><input type="date" id="pd-date" class="inp !py-2 !px-3 font-bold text-gray-700 bg-gray-100" value="${x.date ? x.date.split('T')[0] : ''}" readonly disabled></div>
                         </div>
                         <div class="flex items-center mt-1">
-                            <div class="w-1/3 text-[10px] text-gray-500 font-bold uppercase tracking-wide">Delivery Date</div>
-                            <div class="w-2/3"><input type="date" id="pd-due" class="inp !py-2 !px-3 font-bold text-gray-700" value="${x.due ? x.due.split('T')[0] : ''}"></div>
+                            <div class="w-1/3 text-[10px] text-gray-500 font-bold uppercase tracking-wide">Target Delivery Date</div>
+                            <div class="w-2/3"><input type="date" id="pd-due" class="inp !py-2 !px-3 font-bold text-gray-700 bg-gray-100" value="${x.due ? x.due.split('T')[0] : ''}" readonly disabled></div>
                         </div>
                         <div class="flex items-center mt-1">
                             <div class="w-1/3 text-[10px] text-gray-500 font-bold uppercase tracking-wide">Gender</div>
-                            <div class="w-2/3"><select id="pd-sex" class="inp !py-2 !px-3 font-bold text-gray-700">${sexOpts}</select></div>
+                            <div class="w-2/3"><select id="pd-sex" class="inp !py-2 !px-3 font-bold text-gray-700 bg-gray-100" disabled>${sexOpts}</select></div>
+                        </div>
+                        <div class="flex items-center mt-1">
+                            <div class="w-1/3 text-[10px] text-gray-500 font-bold uppercase tracking-wide">Age</div>
+                            <div class="w-2/3"><input type="number" id="pd-age" class="inp !py-2 !px-3 font-bold text-gray-700 pd-editable" value="${x.age || ''}" disabled></div>
                         </div>
                     </div>
                 </div>
@@ -2782,79 +3055,66 @@
                     <div class="flex flex-col gap-4">
                         <div class="flex items-center mt-1">
                             <div class="w-1/3 text-[10px] text-gray-500 font-bold uppercase tracking-wide">Product</div>
-                            <div class="w-2/3"><select id="pd-prod" class="inp !py-2 !px-3 font-bold text-gray-700">${prodOpts}</select></div>
+                            <div class="w-2/3"><select id="pd-prod" class="inp !py-2 !px-3 font-bold text-gray-700 bg-gray-100" disabled>${prodOpts}</select></div>
                         </div>
                         <div class="flex items-center mt-1">
                             <div class="w-1/3 text-[10px] text-gray-500 font-bold uppercase tracking-wide">Tooth Color/Shade</div>
-                            <div class="w-2/3"><select id="pd-shade" class="inp !py-2 !px-3 font-bold text-gray-700">${shadeOpts}</select></div>
+                            <div class="w-2/3"><select id="pd-shade" class="inp !py-2 !px-3 font-bold text-gray-700 bg-gray-100" disabled>${shadeOpts}</select></div>
                         </div>
                         <div class="flex items-center mt-1">
                             <div class="w-1/3 text-[10px] text-gray-500 font-bold uppercase tracking-wide">Technician</div>
-                            <div class="w-2/3"><select id="pd-asn" class="inp !py-2 !px-3 font-bold text-gray-700">${techOpts}</select></div>
+                            <div class="w-2/3"><select id="pd-asn" class="inp !py-2 !px-3 font-bold text-gray-700 pd-editable" disabled>${techOpts}</select></div>
                         </div>
                         <div class="flex items-center mt-1">
                             <div class="w-1/3 text-[10px] text-gray-500 font-bold uppercase tracking-wide">Date Completed</div>
-                            <div class="w-2/3"><input type="date" id="pd-comp" class="inp !py-2 !px-3 font-bold text-gray-700" value="${x.comp ? x.comp.split('T')[0] : ''}"></div>
+                            <div class="w-2/3"><input type="date" id="pd-comp" class="inp !py-2 !px-3 font-bold text-gray-700 pd-editable" value="${x.comp ? x.comp.split('T')[0] : ''}" disabled></div>
                         </div>
                         <div class="flex flex-col mt-1">
                             <div class="w-full text-[10px] text-gray-500 font-bold uppercase tracking-wide mb-1">Instructions</div>
-                            <div class="w-full"><textarea id="pd-rem" class="inp !py-2 !px-3 font-bold text-gray-700 h-24">${x.rem||''}</textarea></div>
+                            <div class="w-full"><textarea id="pd-rem" class="inp !py-2 !px-3 font-bold text-gray-700 h-24 pd-editable" disabled>${x.rem||''}</textarea></div>
                         </div>
                     </div>
                 </div>
             </div>
-           
+            
             <div class="mt-8 pt-4 border-t flex justify-end">
-                <button onclick="saveProdDetails()" class="btn btn-blue px-10 py-3 shadow-md">SAVE CHANGES</button>
+                <button id="pd-save-btn" onclick="saveProdDetails()" class="btn btn-blue px-10 py-3 shadow-md hidden">SAVE CHANGES</button>
             </div>
         `;
     }
 
+    function editProdDetails() {
+        document.querySelectorAll('.pd-editable').forEach(el => el.disabled = false);
+        document.getElementById('pd-save-btn').classList.remove('hidden');
+    }
+
     function saveProdDetails() {
         if (selectedProdIdx === -1 || !S.o[selectedProdIdx]) return;
-       
+        
         let x = S.o[selectedProdIdx];
-       
+        
         x.st = document.getElementById('pd-st').value;
-        x.id = document.getElementById('pd-id').value;
-        x.sex = document.getElementById('pd-sex').value;
-        x.shade = document.getElementById('pd-shade').value;
-       
-        let selectedProd = document.getElementById('pd-prod').value;
-        if(selectedProd) {
-            x.prods = [selectedProd];
-        } else {
-            x.prods = [];
-        }
-       
         x.rem = document.getElementById('pd-rem').value;
         x.asn = document.getElementById('pd-asn').value;
-
-        let newDate = document.getElementById('pd-date').value;
-        if(newDate) x.date = newDate.includes('T') ? newDate : newDate + 'T00:00';
-        else x.date = "";
-
-        let newDue = document.getElementById('pd-due').value;
-        if(newDue) x.due = newDue.includes('T') ? newDue : newDue + 'T00:00';
-        else x.due = "";
+        x.age = document.getElementById('pd-age').value;
 
         let newComp = document.getElementById('pd-comp').value;
         if(newComp) x.comp = newComp.includes('T') ? newComp : newComp + 'T12:00';
         else x.comp = "";
 
         sv(); rProd(); dash(); if(typeof rAcc === 'function') rAcc();
-       
+        
         if (document.getElementById('p-calendar').classList.contains('active')) {
             initFullCal();
         }
-       
+        
         alert("Job Order Updated Successfully!");
     }
 
     function renderCatalog() {
         let grid = document.getElementById('price-grid');
         if (!grid) return;
-       
+        
         grid.innerHTML = PRODS.map(p => {
             let safeId = 'pr-' + p.replace(/[^a-zA-Z0-9]/g, '');
             return `
@@ -2878,11 +3138,10 @@
         alert('Pricing Catalog Updated Successfully!');
     }
 
-    // CALENDAR - UPDATED
     function initFullCal(){
         let calEl = document.getElementById('calendar');
         if(window.fullCal) { window.fullCal.destroy(); }
-       
+        
         let calEvents = S.o.flatMap(x => {
             let evs = [];
             let color = '#f59e0b';
@@ -2892,7 +3151,7 @@
 
             if(x.date) evs.push({ title: `[RCVD] ${x.id} - ${x.pat}`, start: x.date, backgroundColor: color, borderColor: color, extendedProps: { caseObj: x } });
             if(x.due) evs.push({ title: `[DUE] ${x.id} - ${x.pat}`, start: x.due, backgroundColor: '#000000', borderColor: '#000000', textColor: '#ffffff', extendedProps: { caseObj: x } });
-           
+            
             return evs;
         });
 
@@ -2916,14 +3175,14 @@
         let todayRaw = new Date();
         let offset = todayRaw.getTimezoneOffset() * 60000;
         let todayStr = new Date(todayRaw - offset).toISOString().split('T')[0];
-       
+        
         let upc = S.o.filter(x => {
             let isNotDone = x.st !== 'DONE' && x.st !== 'DELIVERED';
             let isDueToday = x.due && x.due.startsWith(todayStr);
             let isActionable = x.date && x.date.startsWith(todayStr);
             return isNotDone && (isDueToday || isActionable);
         });
-       
+        
         document.getElementById('cal-tasks-list').innerHTML = upc.map(x => {
             let d = x.due ? x.due.split('T')[0] : '';
             let tskNote = x.rem ? x.rem : 'Pending Case Action';
@@ -2939,20 +3198,20 @@
     function openCalEdit(i) {
         let x = S.o[i];
         document.getElementById('cal-idx').value = i;
-       
+        
         document.getElementById('cal-v-id').innerText = x.id;
         document.getElementById('cal-v-pat').innerText = x.pat;
         document.getElementById('cal-v-doc').innerText = x.doc;
         document.getElementById('cal-v-st').innerText = x.st;
         document.getElementById('cal-v-qty').innerText = x.qty || 1;
         document.getElementById('cal-v-items').innerText = (x.prods || []).join(', ') || 'N/A';
-       
+        
         document.getElementById('cal-date').value = x.date || '';
         document.getElementById('cal-comp').value = x.comp || '';
         document.getElementById('cal-due').value = x.due || '';
         document.getElementById('cal-ret').value = x.ret || '';
         document.getElementById('cal-rem').value = x.rem || '';
-       
+        
         closeModals();
         document.getElementById('mod-cal-edit').classList.add('active');
     }
@@ -2960,15 +3219,15 @@
     function saveCalDates() {
         let i = document.getElementById('cal-idx').value;
         if(i === "") return;
-       
+        
         S.o[i].date = document.getElementById('cal-date').value;
         S.o[i].comp = document.getElementById('cal-comp').value;
         S.o[i].due = document.getElementById('cal-due').value;
         S.o[i].ret = document.getElementById('cal-ret').value;
         S.o[i].rem = document.getElementById('cal-rem').value;
-       
+        
         sv(); rOrd(); rProd(); dash();
-       
+        
         if(document.getElementById('p-calendar').classList.contains('active')) {
             initFullCal();
         }
@@ -2976,19 +3235,18 @@
         alert("Calendar Schedule & Notes Updated Successfully!");
     }
 
-    // DISCOUNT GENERATOR
     function rDisc(){
         document.getElementById('v-list').innerHTML = S.v.map((v,i)=>{
             let isExp = v.e && new Date(v.e) < new Date();
             return `<div class="card !p-4 flex justify-between items-center ${isExp?'opacity-40 bg-gray-100':'border-l-4 border-green-500'}"><div><b class="text-lg">${v.c} <span class="text-green-600">(-${v.p}%)</span></b><br><small class="font-bold text-gray-500">EXPIRY: ${v.e||'PERMANENT'}</small></div><button onclick="del('v',${i})" class="btn btn-red px-4">DEL</button></div>`;
         }).join('');
     }
+
     function addDisc(){
         let c=document.getElementById('v-code').value.toUpperCase(), p=document.getElementById('v-pct').value, e=document.getElementById('v-exp').value;
         if(c&&p){ S.v.push({c,p,e}); sv(); rDisc(); document.getElementById('v-code').value=''; document.getElementById('v-pct').value='';}
     }
 
-    // GATEKEEPER & USERS
     function rUsers(){
         let isSA = S.curr.d === 'SYSTEM ARCHITECT';
         let isAdmin = S.curr.d === 'ADMIN';
@@ -3028,7 +3286,7 @@
         document.getElementById('u-act').innerHTML = active.map((x,i)=> {
             let isSelf = (x.n === S.curr.n);
             let actionBtns = '';
-           
+            
             let passBadge = isSA ? `<span class="text-[10px] bg-red-100 text-red-800 px-2 py-1 rounded ml-1 border border-red-300">PASS: ${x.p}</span>` : '';
 
             if (canManageUsers && !isSelf) {
@@ -3056,11 +3314,11 @@
         if(type === 'mods') S.sys.adminFullMods = val;
         sv(); rUsers();
     }
-   
+    
     function editUserMods(n){
         let u = S.u.find(x=>x.n===n);
         document.getElementById('mod-target-idx').value = S.u.indexOf(u);
-       
+        
         let isAdmin = S.curr.d === 'ADMIN';
         let availableMods = (isAdmin && !S.sys.adminFullMods) ? ADMIN_DEFAULT_MODS : [...BASE_MODS, ...S.dynMods];
 
@@ -3071,7 +3329,7 @@
         `).join('');
         document.getElementById('mod-user-mods').classList.add('active');
     }
-   
+    
     function saveUserMods(){
         let idx=document.getElementById('mod-target-idx').value;
         let checks=document.querySelectorAll('.mod-chk:checked');
@@ -3079,13 +3337,13 @@
         sv(); closeModals(); rUsers();
         if(document.getElementById('p-maintenance').classList.contains('active')) rMaintenance();
     }
-   
+    
     function uAct(n,s){ S.u.find(x=>x.n===n).s=s; sv(); rUsers(); }
 
     function updateProfile(){
         if(document.getElementById('set-n').value) S.curr.n=document.getElementById('set-n').value;
         if(document.getElementById('set-p').value) S.curr.p=document.getElementById('set-p').value;
-       
+        
         if(S.curr.d === 'SYSTEM ARCHITECT') {
             S.curr.sr = document.getElementById('set-show-role').checked;
         }
@@ -3097,14 +3355,14 @@
 
     function changeUI(t, v){ if(t==='font') document.documentElement.style.setProperty('--font-main', v); if(t==='text') document.documentElement.style.setProperty('--text', v); if(t==='bg') document.documentElement.style.setProperty('--bg', v); }
     function toggleChat(){ let b=document.getElementById('chat-box'); b.style.display=b.style.display==='flex'?'none':'flex'; }
-   
+    
     function initChat(){
         let visibleUsersForChat = S.u.filter(x => x.n !== S.curr.n);
 
         let opts = '<option value="GLOBAL"> GROUP CHAT</option>';
         opts += visibleUsersForChat.map(x => {
             let label = x.n;
-           
+            
             if (x.d === 'SYSTEM ARCHITECT') {
                 if (x.sr) {
                     label += ` (${x.d})`;
@@ -3112,10 +3370,10 @@
             } else {
                 label += ` (${x.d})`;
             }
-           
+            
             return `<option value="${x.n}">${label}</option>`;
         }).join('');
-       
+        
         document.getElementById('chat-to').innerHTML = opts;
     }
 
@@ -3128,7 +3386,7 @@
             document.getElementById('chat-in').value='';
         }
     }
-       
+        
     function rChat(){
         let t = document.getElementById('chat-to').value;
         let f = S.msg.filter(x => {
@@ -3142,7 +3400,7 @@
                 <span class="${x.f===S.curr.n?'bg-blue-500 text-white':'bg-gray-200 text-gray-800'} p-2 px-3 rounded-xl inline-block shadow-sm max-w-[85%] text-left">${x.m}</span>
             </div>
         `).join('') || '<div class="text-center text-gray-400 mt-10">No messages yet.</div>';
-       
+        
         let body = document.getElementById('chat-body');
         body.scrollTop = body.scrollHeight;
     }
